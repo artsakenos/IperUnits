@@ -1,0 +1,30 @@
+
+   #######################
+   # SoftwareEngineering #
+   #######################
+
+# Seguono i tipici nomi che do io alle mie librerie
+{iperlibreria}:={super_prefisso}{libreria} {versione}, con {design_pattern}
+{super_prefisso}:=Super|Iper|Ultra|Mega|Maxi|Magnum
+{libreria}:=FileReader|ImageOpener|TextParser|IntCounter|Logger
+{versione}:=2000|Dotraki Version|2.0|Beta Revenge|Savage Release|Gundam Extension|Revenge Deluxe|Borderline Edition
+{design_pattern}:={dp_adj} {dp_noun}
+{dp_adj}:=Stateless|Serverless|FastLane|Composite|Intercepting|Transient|Volatile|Abstract|Immutable|Dynamic|Virtual|Layered|Null|Templated
+{dp_noun}:=Cloud Service|Delegation|Entity|View|Object|Reader|Controller|Locator|Facade|Handler|Helper|Interface|Proxy|Builder|Model|Prototype|Singleton|Pool|Marker|Factory|Bridge|Flyweight|Service|Adapter|Listener|Decorator|Cache|Command|Strategy|Producer|Consumer
+
+{iper_presentazione}:={iperintro} {super_prefisso}{libreria} {versione}, {dotato} {design_pattern} {complimenti_ulteriori}
+{iperintro}:=Vi presentiamo|E' finalmente uscita la libreria|Siamo lieti di presentarvi
+{dotato}:=con l'innovativo pattern|dotata di|con tecnologia|su substrato algoritmico dotato di
+{complimenti_ulteriori}:=di ultima concezione|in coproduzione con la NASA|progettato dai migliori Software Architects|vantato dai migliori analisti|utilizzato nei booster di Space X
+
+{consigli_collega}:={hai_pensato_di} {sfruttare} un {design_pattern}?
+{hai_pensato_di}:=Hai mai pensato di|Hai ipotizzato una soluzione che si possa|Perché non|Dimentichi ancora di|Che ne pensi invece di|Andre, non faresti meglio a|Quando mai qui non
+{sfruttare}:=impiegare|sfruttare|sostituire con|implementare|decompilare|ripiegare su|
+
+{sfruttare_design_pattern}:={sfruttare} un {design_pattern}
+{pensi_top}:=Ma vuoi davvero|Ma hai di nuovo voluto|Ancora con questa storia di|Non mi dire che ancora vuoi
+{invece_bottom}:=Credo sia meglio|Io di solito risolvo tentando di|Di solito chi sa programmare deve|Quelli che lo sanno convergono sul
+{filippo_design_pattern_top}:=Andre, {pensi_top} {sfruttare_design_pattern}?
+{filippo_design_pattern_bottom}:={invece_bottom} {sfruttare_design_pattern}!
+{fdp_message}:=Lo terrò a mente!|D'ora in poi farò così!|Lezioni di vita.|Non mancherò di rispettare il design pattern|Non vedo l'ora di implementarlo.
+

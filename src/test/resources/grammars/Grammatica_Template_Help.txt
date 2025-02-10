@@ -1,0 +1,45 @@
+
+   #######################
+   # Grammatica Template #
+   #######################
+
+# Le linee vuote o le linee che partono con "#" non sono considerate.
+# E' una BNF con qualche modifica minore, ad esempio { e } sono meno utilizzati di < e > quindi li rimpiazzano.
+# Gli spazi sono abbastanza importanti, sul lato destro.. cioè vengono conservati (utile per fare combinazioni di parole)
+
+# SuperGrammar può caricare diversi file di grammatica, e in base a quelli generare dei testi.
+# I file il cui nome è del tipo {nome} contengono una lista di valori separati da \n anziché da |.
+#   Questo è utile per file enormi o per riutilizzare file esistenti, tipo un file che contiene tutti i nomi propri.
+
+# Regole della grammatica
+# - I valori separati da | sono equiprobabili.
+# - Le chiavi possono contenere qualsiasi carattere, tranne { e } che sono i delimitatori,
+#   compresi gli spazi. I nomi devono essere esplicativi in modo che la frase abbia un senso
+#   facile da riconoscere e comporre.
+# - Il primo := separa chiave e valori, i successivi non vengono considerati
+
+
+    ##########
+    # ESEMPI #
+    ##########
+
+{frase} := {soggetto} {verbo transitivo} {complemento oggetto}
+
+# Notare come ho aggiunto agilmente il passato al verbo.
+{evento passato}:=Ho visto un giorno {soggetto} che {verbo transitivo}va {complemento oggetto}
+
+{soggetto} := {nome}|er {animale}|il {animale_leggendario}
+{verbo transitivo}:=si mangia|si beve|codda|carezza|desidera
+{complemento oggetto}:=il vino|un cane|peppino|{animale_leggendario}
+
+{nome}:=pasquale|giggetto|gavvino|benito
+{animale}:=gatto|cane|maiale
+
+# Animale leggendario è un animale ma con qualche caratteristica in più
+{animale_leggendario}:={parte_alta}{animale} {parte_bassa}
+{parte_alta}:=Budo|Fecal|Dorae|Poke|Milfo
+{parte_bassa}:=a tre teste|megapenis|superfast|mangiauomini|truculentis
+
+# Se una chiave compare più volte, viene sostituita con la stessa espansione.
+# Quindi si può fare qualcosa del tipo: {nome_2}:={nome}
+{sentence}:={nome} e {nome_2} sono in genere diversi.

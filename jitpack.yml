@@ -1,0 +1,7 @@
+jdk:
+  - openjdk15
+before_install:
+  - sdk list
+  - sdk install java 15.0.2.hs-adpt
+  - sdk use java 15.0.2.hs-adpt
+  - java -version

@@ -1,0 +1,5 @@
+
+{religione}:={rel_prefisso}{rel_suffisso} {rel_aggettivo}
+{rel_prefisso}:=pera|catto
+{rel_suffisso}:=musulmani|cattolici|mormoni|buddisti
+{rel_aggettivo}:=dell'ultima ora|del settimo sigillo|della morte|bagassieri di vega

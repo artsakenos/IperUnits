@@ -1,0 +1,72 @@
+
+# Raccolte
+{partito_descrizione}:={programma_politico}. Perciò {pp_promettiamo} {slogan_governo}. {un_urlo}!
+
+# Governo Sensazionale
+{slogangoverno}:=Il Governo {slogan_governo_oggetto}.
+{slogan_governo_oggetto}:=del Rifare|del Disfare|dello Strafare|del Gambiamento|delle Libertà|dei Governi|dell'Apocalisse|di tua Mamma|a Sorpresa|Bis|Secondo Matteo
+
+
+# Stemmi
+{stemma}:={stemma_oggetto} su {stemma_sigillo} {stemma_aggettivo}
+{stemma_oggetto}:=pollo guerriero|angelo combattiero|occhio diabolico|sparviero galliforme
+{stemma_sigillo}:=quadrangolo|romboide|thorus|scudo bardato|maglione medievale
+{stemma_aggettivo}:=verde marino|lungo lungo|un po' grosso|bello grande|piccolino
+
+# Nome Partito
+{np_nome}:=Movimento|Il popolo|Forza|Partito|Girotondo|Alleanza|Unione
+{np_aggettivo}:=Cinque Sorelle|Nuovo|di Disobbedienza|Protestante|Militante|delle Banane|Nazipacifista|di Estremo Centro|Cattocomunista|Vescovile|Illuminante
+{np_nomepartito}:={np_nome} {np_aggettivo}
+
+# Nome Persona
+{nome_politicante}:={nome_proprio_maschile} {cognome}|{nome_proprio_femminile} {cognome}|{nome_proprio_femminile} {nome_proprio_femminile} {cognome}
+
+# Programma
+{programma_politico}:={pp_auspichiamo} {pp_unqualcosa} di {pp_specificazione}
+{pp_auspichiamo}:=auspichiamo|proponiamo|speriamo in|il nostro obbiettivo è|ci impegneremo per
+{pp_unqualcosa}:=un governo|un provvedimento|un disegno di legge|un attacco|una serie di interventi
+{pp_specificazione}:=globalizzazione|devolution|riforma|opposizione|maggioranza|legge|guerra
+{pp_promettiamo}:=promettiamo|pensiamo a|siamo sicuri di tirar su|non accettiamo
+
+{un_urlo}:={urlo_tutti} {urlo_urliamo} {urlo_assassini}
+{urlo_tutti}:=tutti quanti|tutti insieme|uniti|scesi nelle piazze|in spiaggia e in montagna
+{urlo_urliamo}:=gridiamo|urliamo|reclamiamo
+{urlo_assassini}:=assassini|buffoni|in galera|viva la felicità|giu' le mani dalle marmellate|viva la protesta|sciopero totale|guerra termonuculare
+
+{slogan_governo}:={slogan_quantita} {slogan_oggetto} per {slogan_destinatario}
+{slogan_quantita}:=più|meno|un po' meno|eliminazione di|un sacco di|abbastanza|un eccessivo ammontare di|riduzione di|una pletora di
+{slogan_oggetto}:=tasse|sesso|pressione fiscale|cibo|dignità|promisquità|arcimbolde|canali tv|veline|gattini|condoni|condoglianze|preghiere|pensioni|supercazzole
+{slogan_destinatario}:=tutti|nessuno|gli immigrati|quelli di colore|i rumeni|gli zingari|il sud|l'ovest|i terroni
+
+{ministero}:=Ministero del {tipo_politiche_sost_del_al}
+{ruolo_politicante}:={tipo_ministro_del} {tipo_politiche_del}|{tipo_ministro_al} {tipo_politiche_al}
+{tipo_ministro_del}:=Ministro|Senatore|Presidente|Gran Ciambellano|Gran Visir
+{tipo_ministro_al}:=Assessore|Delegato|Responsabile|Gran Cancelliere|Deputato
+
+{tipo_politiche_del}:=del {tipo_politiche_sost_del_al} {tipo_politiche_adj_del_al}|dei {tipo_politiche_sost_dei_ai} {tipo_politiche_adj_dei_ai}|degli {tipo_politiche_sost_degli_agli} {tipo_politiche_adj_dei_ai}
+{tipo_politiche_al}:=al {tipo_politiche_sost_del_al} {tipo_politiche_adj_del_al}|ai {tipo_politiche_sost_dei_ai} {tipo_politiche_adj_dei_ai}|agli {tipo_politiche_sost_degli_agli} {tipo_politiche_adj_dei_ai}
+
+{tipo_politiche_sost_del_al}:=Traffico|Sesso|Labirinto|Trasporto|Comparto Militare
+{tipo_politiche_sost_dei_ai}:=Trasporti|Portafogli|Rumeni|Traffici
+{tipo_politiche_sost_degli_agli}:=Zingari|Alterchi|Affari|Opportunismi
+{tipo_politiche_adj_del_al}:=Incostituzionale|Sessuale|Senza Portafogli|Alterco|Improvvisato|Superlativo|Interinale|Emotivo
+{tipo_politiche_adj_dei_ai}:=Incostituzionali|Sessuali|Superlativi|Improvvisati|Interni
+
+## Da sistemare!!
+
+# DITTATORE ::= se il (dittatore | generale | colonnello | criminale) \(hitler | stalin | pinochet | helder) TOBE in vita SEGNO.V (ved^(e|rebbe|esse) il suo erede nel | sa^(rebbe|resse) un grande amico del | non si comporte^(rebbe|resse) diversamente dal ) [vice^]presidente DELLACOSA ;
+# PROPOSITO ::= [noi] (auspichiamo | proponiamo | speriamo in ) ((M:un|F:una) WHAT [che TOBE] PM AGGPOS).(M|F) INORDERTO ((M:un|F:una) PAX [che TOBE] [PM|ADV] AGGPOS).(M|F);
+# INORDERTO ::= (per | al fine di (avere|raggiungere|stabilire) | cosicche' si (raggiunga | abbia)) ;
+# WHAT ::= M:(governo | provvedimento | disegno di legge | attacco) | F:( globalizzazione | devolution | riforma | opposizione | maggioranza | legge | guerra ) ;
+# DISC ::= M:(il discorso | l'intervento)|F:(l'uscita | la sparata | la censura);
+# WHY ::= ([noi] THINK | TOBE evidente | i fatti recenti provano ) che;
+# THINK ::= crediamo | pensiamo | riteniamo | siamo sicuri | [non] accettiamo ;
+# SOGG ::= M:(il presidente DELLACOSA | questo WHAT.M) | F :(questa WHAT.F);
+# PAX ::= M:(governo | paese | welfare | parlamento | popolo  )|F:(democrazia | pace | societa' | popolazione | bandiera della pace | liberta' [di PAX.(M|F)] | satira);
+# DELLACOSA ::= della \camera | del \senato | del \consiglio | della \repubblica | della \p2 | dell'\oriente \italiano | della "CGIL" | della "CISL" | della "UIL" ;
+# ADV ::= inevitabilmente | spaventosamente | [in^]costituzionalmente | onanisticamente | veramente | davvero;
+# WITHOUT ::= senza CONG e senza CONG ;
+# CONG ::= se | ma | perche' | percio' | allora | dunque | non | quemadmodum ;
+# AGGNEG ::= incostituzionale | fascista | ingiust^(M:o|F:a) | illecit^(M:o|F:a) | illegale | infelice ;
+# AGGPOS ::= pacific^(M:o|F:a) | democratic^(M:o|F:a) | giust^(M:o|F:a) | migliore | simpatic^(M:o|F:a) | tollerante | costituzionale | liberale | legale | legittim^(M:o|F:a) | duratur^(M:o|F:a) ;
+

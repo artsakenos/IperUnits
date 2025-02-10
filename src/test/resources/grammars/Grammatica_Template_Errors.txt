@@ -1,0 +1,9 @@
+
+   #######################
+   # Grammatica Template #
+   #######################
+
+# Qualche errore inserito di proposito per i test di robustismo.
+Questa linea è sbagliata, non ha una chiave a sinistra := Ciao.
+{Andrea Sulis} = Padre maronno. Sbagliato, L'assegnamento dovrebbe essere con ':' e '='...
+{pippo}:=Pluto e topolino := Ciao. Il primo := è quello che conta.
