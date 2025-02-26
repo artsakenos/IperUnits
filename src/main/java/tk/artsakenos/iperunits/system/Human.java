@@ -10,9 +10,7 @@ import static tk.artsakenos.iperunits.system.SuperExecutor.*;
 
 /**
  * La classe Human, si propone di simulare la presenza di un utente alla
- * console.
- * <p>
- * E' un linguaggio di Script.
+ * console tramite un linguaggio di Script.
  *
  * @author <p style="color:red; font-family:verdana;">
  * <a href="mailto:a.addis@gmail.com">Andrea Addis</a> - &copy;<a
@@ -22,30 +20,13 @@ import static tk.artsakenos.iperunits.system.SuperExecutor.*;
 @SuppressWarnings("unused")
 public class Human {
 
+    private static final String KEYBOARD = "KEYBOARD";
+    private static final String MOUSE = "MOUSE";
+    private static final String SYSTEM = "SYSTEM";
+    private static final String CONDITION = "CONDITION";
+
     /**
-     * Il comando si esprime come CONTEXT COMMAND {Comando}. Le prime parole
-     * sono maiuscole (case sensitive}
-     * <pre>
-     * CONTEXT      ACTION      Comando
-     * -----------|-----------|-------------------------------------------------
-     * KEYBOARD     TYPE        {Stringa}   Stringa nel formato Keyboard.Write
-     *
-     * MOUSE        MOVETO      {x,y}       Muove il mouse alla posizione {x,y}
-     * MOUSE        MOVETOR     {x,y}       Muove rapidamente il mouse alla posizione {x,y}
-     * MOUSE        MOVEBY      {dx,dy}     Muove il mouse relativamente dalla posizione {dx, dy}
-     * MOUSE        CLICK       {String}    Stringa nel formato Mouse.Click
-     * MOUSE        WHEEL       delta       Ruota la rotella di delat (+ gi�, -s�)
-     *
-     * SYSTEM       WAIT        {int}       Millisecondi di attesa
-     * SYSTEM       WAITCHANGE  {x,y}       Attende il cambio del pixel in {x,y}
-     * SYSTEM       WAITCOLOR   {x,y,r,g,b} Attende il colore color(r,g,b) nel pixel in {x,y}
-     * SYSTEM       EXECUTE     {String}    Il percorso del programma da eseguire
-     * SYSTEM       START       {String}    Il percorso del file da eseguire (solo windows)
-     * SYSTEM       BEEP        freq        Un beep di sistema alla frequenza freq
-     *
-     * SYSTEM       OPENFOLDER  {String}    Apre la cartella (win/linux)
-     * SYSTEM       OPENURL     {String}    Apre l'URL (win/linux)
-     * </pre>
+     * Vedi il file <a href="./Readme.md">Readme.md</a>.
      *
      * @param command Il comando
      */
@@ -54,49 +35,86 @@ public class Human {
         if (command.isEmpty()) {
             return;
         }
+
+        // Manteniamo il tuo metodo di parsing originale
         String context = command.substring(0, command.indexOf(" ")).trim();
         command = command.substring(command.indexOf(" ")).trim();
         String action = command.substring(0, command.indexOf(" ")).trim();
         command = command.substring(command.indexOf(" ")).trim();
 
-        // System.out.println("Context:" + context + ";");
-        // System.out.println("Action:" + action + ";");
-        // System.out.println("Command:" + command + ";");
-        if (context.equals("KEYBOARD")) {
-            if (action.equals("TYPE")) {
-                Keyboard.Write(command);
+        // Esecuzione dei comandi per contesto
+        switch (context) {
+            case KEYBOARD:
+                executeKeyboardCommand(action, command);
+                break;
+            case MOUSE:
+                executeMouseCommand(action, command);
+                break;
+            case SYSTEM:
+                executeSystemCommand(action, command);
+                break;
+            case CONDITION:
+                checkCondition(action, command);
+                break;
+        }
+    }
+
+
+    private static Point cMousePosition = null;
+    private static Color cMouseColor = null;
+
+    private static boolean checkCondition(String action, String command) {
+        if (action.equals("MOUSE") && command.equals("MOVED")) {
+            if (cMousePosition != null && !cMousePosition.equals(Mouse.getPoint())) {
+                return true;
             }
         }
+        if (action.equals("MOUSE") && command.equals("00")) {
+            if (Mouse.isMouse00()) return true;
+        }
+        if (action.equals("MOUSE") && command.equals("PIXEL_COLOR_CHANGED")) {
+            if (cMouseColor != null && !cMouseColor.equals(Mouse.getPixelColor(cMousePosition.x, cMousePosition.y))) {
+                return true;
+            }
+        }
+        cMousePosition = Mouse.getPoint();
+        cMouseColor = Mouse.getPixelColor(cMousePosition.x, cMousePosition.y);
+        return false;
+    }
 
-        if (context.equals("MOUSE")) {
-            if (action.equals("MOVETO")) {
+    // Metodi separati per ogni contesto - semplice miglioramento organizzativo
+    private static void executeKeyboardCommand(String action, String command) {
+        if (action.equals("TYPE")) {
+            Keyboard.Write(command);
+        }
+    }
+
+    private static void executeMouseCommand(String action, String command) {
+        switch (action) {
+            case "MOVETO" -> {
                 int x = Integer.parseInt(command.split(",")[0]);
                 int y = Integer.parseInt(command.split(",")[1]);
                 Mouse.setPosSmooth(x, y);
             }
-            if (action.equals("MOVETOR")) {
+            case "MOVETOR" -> {
                 int x = Integer.parseInt(command.split(",")[0]);
                 int y = Integer.parseInt(command.split(",")[1]);
                 Mouse.setPos(x, y);
             }
-            if (action.equals("MOVEBY")) {
+            case "MOVEBY" -> {
                 int x = Integer.parseInt(command.split(",")[0]);
                 int y = Integer.parseInt(command.split(",")[1]);
                 Mouse.setPosBy(x, y);
             }
-            if (action.equals("CLICK")) {
-                Mouse.click(command);
-            }
-            if (action.equals("WHEEL")) {
-                Mouse.wheel(Integer.parseInt(command));
-            }
+            case "CLICK" -> Mouse.click(command);
+            case "WHEEL" -> Mouse.wheel(Integer.parseInt(command));
         }
+    }
 
-        if (context.equals("SYSTEM")) {
-            if (action.equals("WAIT")) {
-                SuperTimer.sleep(Integer.parseInt(command));
-            }
-            if (action.equals("WAITCHANGE")) {
+    private static void executeSystemCommand(String action, String command) {
+        switch (action) {
+            case "WAIT" -> SuperTimer.sleep(Integer.parseInt(command));
+            case "WAITCHANGE" -> {
                 int x = Integer.parseInt(command.split(",")[0]);
                 int y = Integer.parseInt(command.split(",")[1]);
                 Color c = Mouse.getPixelColor(x, y);
@@ -104,7 +122,7 @@ public class Human {
                     SuperTimer.sleep(100);
                 }
             }
-            if (action.equals("WAITCOLOR")) {
+            case "WAITCOLOR" -> {
                 int x = Integer.parseInt(command.split(",")[0]);
                 int y = Integer.parseInt(command.split(",")[1]);
                 int r = Integer.parseInt(command.split(",")[2]);
@@ -118,24 +136,35 @@ public class Human {
                     SuperTimer.sleep(100);
                 }
             }
+            case "EXECUTE" -> execute("", command);
+            case "START" -> execute("start", command);
+            case "BEEP" -> Environment.Beep();
+            case "OPENFOLDER" -> openFolder(command);
+            case "OPENURL" -> executeUrl(command);
+        }
+    }
 
-            if (action.equals("EXECUTE")) {
-                execute("", command);
-            }
-            if (action.equals("START")) {
-                execute("start", command);
-            }
-            if (action.equals("BEEP")) {
-                Environment.Beep();
-            }
-            if (action.equals("OPENFOLDER")) {
-                openFolder(command);
-            }
-            if (action.equals("OPENURL")) {
-                executeUrl(command);
+    /**
+     * Esegue uno script.
+     *
+     * @param script    Lo script
+     * @param loopDelay Il ritardo tra un ciclo e l'altro. Se loopDelay==-1 effettua solo un ciclo.
+     */
+    public static void parseScript(String script, long loopDelay) {
+        String[] lines = script.replaceAll("\r", "").split("\n");
+        if (loopDelay == -1) {
+            for (String line : lines) {
+                parseCommand(line);
             }
         }
+        boolean running = true;
+        while (running) {
+            for (String line : lines) {
+                parseCommand(line);
+            }
+            SuperTimer.sleep(loopDelay);
 
+        }
     }
 
 }

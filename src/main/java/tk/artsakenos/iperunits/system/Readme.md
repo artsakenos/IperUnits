@@ -1,4 +1,49 @@
 
+# Keyboard
+
+Gestisce la simulazione di input da tastiera (click, scrittura, combinazioni di tasti) utilizzando la classe `Robot`.
+
+## Comandi Principali
+
+- **Click(int keyEvent, boolean down)**: Simula la pressione o rilascio di un tasto.
+  - Esempio: `Click(KeyEvent.VK_A, true)` per premere "A".
+  
+- **Click(int keyEvent)**: Simula la pressione e il rilascio di un tasto.
+  - Esempio: `Click(KeyEvent.VK_A)` per premere e rilasciare "A".
+
+- **Click(int keyEvent1, int keyEvent2)**: Simula la pressione e il rilascio di due tasti (combinazioni).
+  - Esempio: `Click(KeyEvent.VK_SHIFT, KeyEvent.VK_A)` per premere "Shift + A".
+
+- **Click(char key)**: Simula la pressione di un tasto corrispondente a un carattere.
+  - Esempio: `Click('A')` per premere "A".
+
+- **Write(String text)**: Simula la digitazione di una stringa.
+  - Esempio: `Write("Hello")` simula la scrittura della parola "Hello".
+
+## Tasti Speciali
+
+- **Combinazioni di tasti**:
+  - KEYBOARD_CTRL_C := `[CONTROL]c[/CONTROL]` per "Ctrl + C".
+  - KEYBOARD_CTRL_V := `[CONTROL]v[/CONTROL]` per "Ctrl + V".
+  - KEYBOARD_NEW_BROWSER_TAB := `[CONTROL]t[/CONTROL]` per "Ctrl + T" (nuova scheda del browser).
+  - KEYBOARD_CTRL_F4 := `[CONTROL][F4][/CONTROL]` per "Ctrl + F4" (chiusura scheda).
+
+- **Altri tasti**: 
+  - `[SHIFT]`, `[ALT]`, `[ENTER]`, `[BACK_SPACE]`, `[SPACE]`, ecc.
+
+## Eccezioni
+- **IllegalArgumentException**: Se un tasto non valido viene passato ai metodi `Click`.
+- **AWTException**: Se non è possibile creare un'istanza di `Robot`.
+
+## Esempio di utilizzo
+
+```java
+Keyboard.Write("Hello, [CONTROL]c[/CONTROL]!");
+```
+
+Simula la scrittura della stringa "Hello," seguita da "Ctrl + C".
+
+
 # Humanizer
 
 | **Comando**                      | **Descrizione**                                                                   | **Esempio** `Human.parseCommand("...");`   |

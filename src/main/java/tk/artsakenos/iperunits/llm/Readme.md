@@ -23,6 +23,9 @@ For Information about LLMs wrapper check
 
 * [Pricing Calculator - YourGPT](https://yourgpt.ai/tools/openai-and-other-llm-api-pricing-calculator)
 * [Pricing Calculator - WhatLLM](https://whatllm.vercel.app/)
+* [LLM Stats - LLM Leaderboard](https://llm-stats.com/)
+* [Artificial Analysis - LLM Leaderboard](https://artificialanalysis.ai/leaderboards/models)
+* [Vellum - LLM Leaderboard](https://www.vellum.ai/llm-leaderboard)
 
 | Provider  | Model Name               | Max CWT In/Out | Cost 1MT IN/OUT | Rate Lim F.T.   | Notes                   |
 |-----------|--------------------------|----------------|-----------------|-----------------|-------------------------|

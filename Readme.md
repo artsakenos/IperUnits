@@ -12,10 +12,14 @@ una suite di strumenti progettata per soddisfare le esigenze applicative e sempl
 - **Gestione File e Directory**: Utility per operazioni su file, directory, archivi ZIP e parsing avanzato.
 - **Gestione Form e Grafica Swing**: Suite completa per la creazione e gestione di interfacce utente con Swing.
 - **Gestione Inizializzatori e Proprietà**: Sistema avanzato per la gestione di configurazioni e proprietà applicative, con supporto cloud.
-- **Modelli LLM e Agenti**: Integrazione con Large Language Models (LLM), [agenti intelligenti](https://infodev.wordpress.com/2023/11/15/ai-agents/), routing e Retrieval-Augmented Generation (RAG).
+- **[Modelli LLM e Agenti](./src/main/java/tk/artsakenos/iperunits/llm/Readme.md)**: 
+    Integrazione con Large Language Models (LLM), 
+    [agenti intelligenti](https://infodev.wordpress.com/2023/11/15/ai-agents/), routing e Retrieval-Augmented Generation (RAG).
 - **Serializzazione e Modellazione JSON**: Framework completo per serializzazione, modellazione JSON, cifratura e operazioni bitwise.
 - **Manipolazione Stringhe e Normalizzazione**: Strumenti avanzati per elaborazione di stringhe, grammatica, sillabazione, tokenizzazione e formattazione date.
-- **Utility di Sistema**: Suite di strumenti per timing, profiling, interazione con l'ambiente e integrazione PowerShell. Sistema completo per gestione eventi e periferiche.
+- **[Utility di Sistema](./src/main/java/tk/artsakenos/iperunits/system/Readme.md)**: 
+    Suite di strumenti per timing, profiling, interazione con l'ambiente e integrazione PowerShell.
+    Sistema completo per gestione eventi e periferiche.
 - **Estensioni per Collezioni e Tipi di Dati**: Framework esteso per la gestione di liste, mappe e tipi personalizzati.
 - **Librerie Web**: Strumenti completi per operazioni client-server, blockchain, Delgado e gestione archivi online.
 
@@ -25,7 +29,7 @@ L'ecosistema comprende un insieme di librerie progettate per rispondere a divers
 dalla gestione di dati e risorse multimediali alla creazione di applicazioni intelligenti.
 Ogni modulo offre funzionalità specifiche integrabili in progetti Java o Android.
 
-Alcune librerie verranno deprecate a causa dell'evoluzione tecnologica
+Molte librerie sono state reingegnerizzate, o deprecate in favore di nuove tecnologie
 (ad esempio UltraNeuro utilizza versioni obsolete di TensorFlow e tecniche superate,
 mentre UltraImage si basa su tecniche di Pattern Recognition e versioni di OpenCV da aggiornare).
 Queste verranno progressivamente incorporate nelle IperUnits o riscritte all'interno di nuove librerie,
@@ -41,7 +45,7 @@ integrate negli UltraServices o in nuove applicazioni.
 
 E altre librerie e applicazioni:
 * **UltraWemo** ([github](https://github.com/artsakenos/UltraWemo)) - allows you to control your WeMo Devices with a pure Java library with no dependencies.
-* **UltraChess**
+* **UltraChess** - wrapper di Stockfish in Java
 * IperApps - Uan suite di micro servizi per il sistema operativo
 * [UltraServices](https://github.com/artsakenos/UltraServices) - Una suite di servizi e framework applicativi (per Java, Python, JS, React) containerizzata e distribution ready.
 
