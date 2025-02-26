@@ -12,7 +12,6 @@ public class RegKeys {
 
     // http://www.regular-expressions.info/reference.html
     public static final String regexEmail = "[a-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-    // other regex email: "[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\\.)+[A-Z]{2,4}"; // "(\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,6})";
     public static final String regexUrl = "((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\.&]*)";
     public static final String regexMailto = "mailto:" + regexEmail;
     public static final String regexWWW = "www.\\w+\\.\\S*"; // www.<parola>.<qualsiasi cosa_senza spazi o ritorni>

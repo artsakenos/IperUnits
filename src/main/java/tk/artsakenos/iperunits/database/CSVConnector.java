@@ -20,7 +20,7 @@ import java.util.LinkedHashSet;
 @SuppressWarnings("unused")
 public class CSVConnector implements Serializable {
 
-    private final LinkedHashSet<Object[]> table = new LinkedHashSet<Object[]>();
+    private final LinkedHashSet<Object[]> table = new LinkedHashSet<>();
     private String[] header = null;
     public String lineSeparator = "\n";
     public String columnSeparator = "\t";
@@ -155,20 +155,5 @@ public class CSVConnector implements Serializable {
         }
         table.add(currentRow);
         currentRow = null;
-    }
-
-    //--------------------------------------------------------------------------
-    public static void test(String[] args) {
-        CSVConnector csv = new CSVConnector();
-
-        csv.add("gino", 2, "pippo");
-        csv.add("gino", 2, "pappo");
-        csv.add("gino", 3, "lello");
-        csv.add("pino", 3, "lallo");
-
-        System.out.println(csv.toString());
-
-        LinkedHashSet<Object[]> get = csv.get("gino", 2);
-        System.out.println(csv.toString(get));
     }
 }

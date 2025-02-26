@@ -123,7 +123,7 @@ public class HashCounter<E> {
         for (E item : itemList.keySet()) {
             output.append(",").append(item).append("=").append(itemList.get(item));
         }
-        if (output.length() > 0) {
+        if (!output.isEmpty()) {
             output = new StringBuilder("[" + output.substring(1) + "]");
         }
         return output.toString();

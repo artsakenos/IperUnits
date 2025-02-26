@@ -47,11 +47,6 @@ public class TableModel extends AbstractTableModel {
     }
 
     @Override
-    public boolean isCellEditable(int row, int col) {
-        return false;
-    }
-
-    @Override
     public void setValueAt(Object aValue, int row, int col) {
         content[row][col] = aValue;
     }

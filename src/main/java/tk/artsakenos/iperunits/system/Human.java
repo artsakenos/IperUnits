@@ -25,15 +25,18 @@ public class Human {
     private static final String SYSTEM = "SYSTEM";
     private static final String CONDITION = "CONDITION";
 
+    private static final String STOP_CONDITION = "STOP";
+
     /**
      * Vedi il file <a href="./Readme.md">Readme.md</a>.
      *
      * @param command Il comando
+     * @return Una stringa vuota se tutto OK, un messaggio altrimenti
      */
-    public static void parseCommand(String command) {
+    public static String parseCommand(String command) {
         command = command.replaceAll("\t", " ").trim();
-        if (command.isEmpty()) {
-            return;
+        if (command.isEmpty() || command.startsWith("#")) {
+            return "";
         }
 
         // Manteniamo il tuo metodo di parsing originale
@@ -54,35 +57,36 @@ public class Human {
                 executeSystemCommand(action, command);
                 break;
             case CONDITION:
-                checkCondition(action, command);
-                break;
+                return checkCondition(action, command);
         }
+        return "";
     }
-
 
     private static Point cMousePosition = null;
     private static Color cMouseColor = null;
+    private static int cLoop = 0;
 
-    private static boolean checkCondition(String action, String command) {
-        if (action.equals("MOUSE") && command.equals("MOVED")) {
-            if (cMousePosition != null && !cMousePosition.equals(Mouse.getPoint())) {
-                return true;
+    private static String checkCondition(String action, String command) {
+        if (action.equals("MOUSE")) {
+            if (command.equals("MOVED")
+                && cMousePosition != null
+                && !cMousePosition.equals(Mouse.getPoint())) {
+                return STOP_CONDITION;
             }
-        }
-        if (action.equals("MOUSE") && command.equals("00")) {
-            if (Mouse.isMouse00()) return true;
-        }
-        if (action.equals("MOUSE") && command.equals("PIXEL_COLOR_CHANGED")) {
-            if (cMouseColor != null && !cMouseColor.equals(Mouse.getPixelColor(cMousePosition.x, cMousePosition.y))) {
-                return true;
+            if (command.equals("00") && Mouse.isMouse00()) return STOP_CONDITION;
+
+            if (command.equals("PIXEL_COLOR_CHANGED")
+                && cMouseColor != null
+                && !cMouseColor.equals(Mouse.getPixelColor(cMousePosition.x, cMousePosition.y))) {
+                return STOP_CONDITION;
             }
         }
         cMousePosition = Mouse.getPoint();
         cMouseColor = Mouse.getPixelColor(cMousePosition.x, cMousePosition.y);
-        return false;
+        cLoop++;
+        return "";
     }
 
-    // Metodi separati per ogni contesto - semplice miglioramento organizzativo
     private static void executeKeyboardCommand(String action, String command) {
         if (action.equals("TYPE")) {
             Keyboard.Write(command);
@@ -131,8 +135,8 @@ public class Human {
                 Color c = new Color(r, g, b);
 
                 while ((Mouse.getPixelColor(x, y).getRed() != c.getRed())
-                        && (Mouse.getPixelColor(x, y).getGreen() != c.getGreen())
-                        && (Mouse.getPixelColor(x, y).getBlue() != c.getBlue())) {
+                       && (Mouse.getPixelColor(x, y).getGreen() != c.getGreen())
+                       && (Mouse.getPixelColor(x, y).getBlue() != c.getBlue())) {
                     SuperTimer.sleep(100);
                 }
             }
@@ -156,14 +160,14 @@ public class Human {
             for (String line : lines) {
                 parseCommand(line);
             }
+            return;
         }
         boolean running = true;
         while (running) {
             for (String line : lines) {
-                parseCommand(line);
+                running &= !parseCommand(line).equals(STOP_CONDITION);
             }
             SuperTimer.sleep(loopDelay);
-
         }
     }
 

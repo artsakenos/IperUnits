@@ -6,7 +6,7 @@
 package tk.artsakenos.iperunits.serial;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Utiliti per la manipolazione di Bits e Bytes.
@@ -82,7 +82,7 @@ public class BitUtils {
      * Restituisce un array riempito con la chiave.
      *
      * @param fraseLen lunghezza in bytes dell'array
-     * @param key l'id della key, e.g., 3 sarà una key 000011
+     * @param key      l'id della key, e.g., 3 sarà una key 000011
      * @return Il byte con la key
      */
     public static byte[] getKey(final int fraseLen, final byte key, final int keyLen) {
@@ -100,7 +100,7 @@ public class BitUtils {
      * Restituisce un array riempito con la chiave.
      *
      * @param fraseLen lunghezza in bytes dell'array
-     * @param key l'id della key, e.g., 3 sarà una key 000011
+     * @param key      l'id della key, e.g., 3 sarà una key 000011
      * @return Il byte con la key
      */
     public static byte[] getKey(final int fraseLen, final byte[] key, final int keyLen) {
@@ -120,13 +120,13 @@ public class BitUtils {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i + 1), 16));
+                                  + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }
 
     public static byte[] ByteArray_fromString(String string) {
-        return string.getBytes(Charset.forName("UTF-8"));
+        return string.getBytes(StandardCharsets.UTF_8);
     }
 
     public static byte[] ByteArray_fromInteger(int integer) {

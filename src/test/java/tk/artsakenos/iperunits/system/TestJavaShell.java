@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 @Disabled
 @Log
-public class JavaShellTest {
+public class TestJavaShell {
 
     UltraJavaShell shell = new UltraJavaShell() {
         @Override

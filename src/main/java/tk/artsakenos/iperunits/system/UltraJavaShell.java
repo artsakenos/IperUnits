@@ -35,10 +35,10 @@ public abstract class UltraJavaShell {
 
     public String getWelcome() {
         return "\n" + "     ------------------------------------------------------------------------\n"
-                + "     -- Welcome to UltraJavaShell v.16.06. \n" + "     -- Type '" + QUIT + "' to leave the shell. \n"
-                + "     -- Type '" + QUIT_FORCE + "' to force close the shell. \n" + "     -- Type '" + HELP
-                + "' to see the available commands. \n" + "     -- Type '" + HISTORY + "' to see the commands used. \n"
-                + "     ------------------------------------------------------------------------\n";
+               + "     -- Welcome to UltraJavaShell v.16.06. \n" + "     -- Type '" + QUIT + "' to leave the shell. \n"
+               + "     -- Type '" + QUIT_FORCE + "' to force close the shell. \n" + "     -- Type '" + HELP
+               + "' to see the available commands. \n" + "     -- Type '" + HISTORY + "' to see the commands used. \n"
+               + "     ------------------------------------------------------------------------\n";
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
@@ -59,7 +59,6 @@ public abstract class UltraJavaShell {
             if (command.equals(QUIT_FORCE)) {
                 System.out.println("UltraJavaShell, force closing");
                 System.exit(123456789);
-                command = QUIT;
             }
             if (command.equals(HISTORY)) {
                 for (int i = 0; i < HISTORY_LIST.size(); i++) {
@@ -72,7 +71,7 @@ public abstract class UltraJavaShell {
                 HISTORY_LIST.add(command);
             } catch (Exception e) {
                 System.err.println("[UltraJavaShell] Errore " + e.getClass().getSimpleName()
-                        + " durante l'esecuzione del comando " + "<" + command + ">: " + e.getLocalizedMessage());
+                                   + " durante l'esecuzione del comando " + "<" + command + ">: " + e.getLocalizedMessage());
                 Logger.getLogger(UltraJavaShell.class.getName()).log(Level.SEVERE, null, e);
             }
         }

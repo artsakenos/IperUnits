@@ -79,7 +79,7 @@ public class MapUtils {
             output.append(key).append(label).append(" -> ").append(map.get(key)).append("\n");
         }
         output.append("-------------------------------------------------\n\n");
-        System.out.println(output.toString());
+        System.out.println(output);
         return output.toString();
     }
 
