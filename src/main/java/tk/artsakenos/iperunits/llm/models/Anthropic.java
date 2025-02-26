@@ -13,6 +13,8 @@ import static tk.artsakenos.iperunits.llm.models.Google.toImageTypeContent;
 
 /**
  * <a href="https://docs.anthropic.com/claude/reference/messages_post">Messages</a>
+ * <a href="https://docs.anthropic.com/en/docs/models-overview">Models</a>
+ * <a href="https://docs.anthropic.com/en/docs/embeddings">Embeddings</a>
  */
 public class Anthropic extends Assistant {
 

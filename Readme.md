@@ -13,7 +13,7 @@ Include una serie di strumenti generici per semplificare lo sviluppo di applicaz
 - **Gestione File e Directory**: Utility per lavorare con file, directory, archivi ZIP e operazioni di parsing.
 - **Gestione Form e Grafica Swing**: Strumenti per la creazione e gestione di interfacce utente (UI) con Swing, e utility per migliorare l’esperienza dell'utente.
 - **Gestione Inizializzatori e Proprietà**: Sistemi per gestire configurazioni e proprietà di applicazioni in modo semplice anche su cloud.
-- **Modelli LLM e Agenti**: Integrazione con modelli linguistici di grandi dimensioni (LLM), agenti intelligenti, routing e retrieval-augmented generation (RAG).
+- **[Modelli LLM e Agenti](./src/main/java/tk/artsakenos/iperunits/llm/Readme.md)**: Integrazione con modelli linguistici di grandi dimensioni (LLM), agenti intelligenti, routing e retrieval-augmented generation (RAG).
 - **Serializzazione e Modellazione JSON**: Supporto per la serializzazione, la modellazione di oggetti JSON, cifratura e bitwise operations.
 - **Manipolazione Stringhe e Normalizzazione**: Funzionalità per formattare, normalizzare e manipolare stringhe, inclusi grammatica, sillabazione, tokenizzazione, formattazione date.
 - **Utility di Sistema**: Strumenti per timer, profiler, interazione con l’ambiente umano e integrazione con la Java PowerShell. Sistema di gestione eventi e periferiche hardware.
@@ -35,12 +35,17 @@ Ogni modulo offre funzionalità specifiche che possono essere facilmente integra
 * **UltraHook** - Strumenti di hooking e gestione di eventi di sistema, delle applicazioni, del clibpboard.
 * **IperLibroid** ([docs](https://artsakenos.github.io/ultra_lib_docs/IperLibroid/index.html)) - Librerie general purpose per lo sviluppo Android.
 
+Molte di queste librerie, sono state reingegnerizzate,
+deprecate in favore di nuove tecnologie,
+o incorporate all'interno delle IperUnits.
 
 ## Applicazioni
 
 Alcune applicazioni costruite sopra le librerie, sono ad esempio:
-* IperApps
-* UltraServices
+* IperApps - Suite di Applicazioni in Java Swing, comprese di applicazioni per il vision, humanizing e la classificazione.
+* UltraServices - In via di reingegnerizzazione
+* Librerie aggiuntive:
+  - UltraChess: wrapper di Stockfish in Java 
 
 
 # Utilizzo

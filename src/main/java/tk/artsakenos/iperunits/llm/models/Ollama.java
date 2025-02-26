@@ -4,8 +4,11 @@ import tk.artsakenos.iperunits.llm.Assistant;
 import tk.artsakenos.iperunits.llm.Conversation;
 
 /**
+ * <a href="https://ollama.com/library">Ollama Library</a>
  * <a href="https://ollama.com/search">Ollama Models</a>
  * <a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Api Documentation</a>
+ * <p>
+ * Per trovare i max_tokens: HF > Files > Config.json > max_position_embeddings
  */
 @SuppressWarnings("unused")
 public class Ollama extends Assistant {
@@ -32,7 +35,7 @@ public class Ollama extends Assistant {
     }
 }
 
-/**
+/*
  * package tk.artsakenos.ultraservices.model.ai_models;
  * <p>
  * import com.fasterxml.jackson.databind.JsonNode;

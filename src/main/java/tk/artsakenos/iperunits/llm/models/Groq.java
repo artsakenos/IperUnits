@@ -5,7 +5,8 @@ import tk.artsakenos.iperunits.llm.Conversation;
 
 /**
  * - <a href="https://console.groq.com/docs/quickstart">Groq API</a>
- * - <a href="https://console.groq.com/settings/limits">Models and Rate Limits</a>
+ * - <a href="https://console.groq.com/docs/models">Models</a>
+ * - <a href="https://console.groq.com/settings/limits">Rate Limits</a>
  */
 @SuppressWarnings("unused")
 public class Groq extends Assistant {
