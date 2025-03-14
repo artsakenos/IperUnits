@@ -161,17 +161,12 @@ public class Mouse {
         char operation = sequenza.charAt(0);
         char tasto = sequenza.charAt(1);
 
-        switch (tasto) {
-            case 'L':
-                tasto = InputEvent.BUTTON1_DOWN_MASK;
-                break;
-            case 'C':
-                tasto = InputEvent.BUTTON2_DOWN_MASK;
-                break;
-            case 'R':
-                tasto = InputEvent.BUTTON3_DOWN_MASK;
-                break;
-        }
+        tasto = switch (tasto) {
+            case 'L' -> InputEvent.BUTTON1_DOWN_MASK;
+            case 'C' -> InputEvent.BUTTON2_DOWN_MASK;
+            case 'R' -> InputEvent.BUTTON3_DOWN_MASK;
+            default -> tasto;
+        };
 
         switch (operation) {
             case '1': {

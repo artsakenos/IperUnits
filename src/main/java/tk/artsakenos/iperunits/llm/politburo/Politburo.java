@@ -54,6 +54,10 @@ public class Politburo {
         this.promptTemplate = FileManager.getAssetString(this, "/politburo/politburo_main.prompt");
     }
 
+    public void addAgent(AiAgent agent) {
+        this.members.add(agent);
+    }
+
     public void execute(String current_target) {
         next();
         String currentSystem = promptTemplate
@@ -61,17 +65,25 @@ public class Politburo {
                 .replace("{politburo.target}", current_target)
                 .replace("{politburo.conversation}", promptPolitburoConversation())
                 .replace("{agent.name}", currentSpeaker.getName())
-                .replace("{agent.profile}", currentSpeaker.getProfile())
+                .replace("{agent.profile}", currentSpeaker.getProfile().replaceAll("\n", "    "))
                 .replace("{agent.target}", currentSpeaker.getTarget());
         LlmService llmService = new LlmService();
         llmService.addMessage(currentSpeaker.getAssistant(), Message.Role.user, currentSystem);
         Message answer = llmService.query();
 
-        System.out.println("-------------------------------------------------------------------------------");
+        System.out.println("   -------------------------------------------------------------");
+        System.out.println("   --- Current System Prompt for the Next Agent ----------------");
+        System.out.println("   -------------------------------------------------------------");
         System.out.println(currentSpeaker.getName() + "> " + currentSystem + "\n");
+
+        System.out.println("   -------------------------------------------------------------");
+        System.out.println("   --- Current Agent Answer ------------------------------------");
+        System.out.println("   -------------------------------------------------------------");
         System.out.printf("%s> %s", currentSpeaker.getName(), answer.getText() + "\n\n");
+
         // log.info("{}> {}", currentSpeaker.getName(), currentSystem);
         // log.info("{}> {}", currentSpeaker.getName(), answer.getText());
+
         conversation.add(currentSpeaker.getName() + ": " + answer.getText().replace("\n", " "));
     }
 

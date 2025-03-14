@@ -27,21 +27,32 @@ import java.awt.*;
 public class FormGraphics {
 
     /**
-     * Setta il look and fill, lasciare "" per mettere quello windows di
-     * default: com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+     * Setta il look and fill, lasciare "" per mettere nimbus di default.
      *
-     * @param className Il nome della classe, se "" verr� messo quello di
-     *                  windows
+     * @param className Il nome della classe, se "" verrà messo quello di
+     *                  nimbus. Altre opzioni shortcode sono: system, cross, metal.
      */
     public static void setLookAndFeel(String className) {
-        if (className.isEmpty()) {
-            // className = com.sun.java.swing.plaf.windows.WindowsLookAndFeel.class.getName();
-            return;
+        if (className == null || className.isEmpty()) {
+            // Usa Nimbus come default moderno
+            className = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+        } else if ("system".equalsIgnoreCase(className)) {
+            // Usa il Look and Feel del sistema operativo
+            className = UIManager.getSystemLookAndFeelClassName();
+        } else if ("cross".equalsIgnoreCase(className)) {
+            // Usa il Look and Feel cross-platform
+            className = UIManager.getCrossPlatformLookAndFeelClassName();
+        } else if ("metal".equalsIgnoreCase(className)) {
+            // Usa il Metal Look and Feel (Ocean Theme)
+            className = "javax.swing.plaf.metal.MetalLookAndFeel";
         }
+
+        // Imposta il Look and Feel
         try {
             UIManager.setLookAndFeel(className);
-        } catch (InstantiationException | IllegalAccessException
-                 | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,8 +88,8 @@ public class FormGraphics {
      * @param startBar La larghezza della startBar (di solito = 40)
      */
     public static void setFramePosition(JFrame frame, int position, int margin, int startBar) {
-        int sw = Screen.getWidth();
-        int sh = Screen.getHeight();
+        int sw = Screen.size().width;
+        int sh = Screen.size().height;
         Rectangle fr = frame.getBounds();
         int px = 0;
         int py = 0;

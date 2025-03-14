@@ -11,17 +11,16 @@ import java.util.HashMap;
 /**
  * @author Andrea
  */
-@SuppressWarnings("unused")
 public class Rule {
 
     @Getter
-    private String name = "";
-    private Condition[] condition = null;
+    private final String name;
+    private final Condition[] condition;
 
     @Getter
-    private String action = "";
-    private DateConstraint dateConstraint = null;
-    private int times = -1;
+    private final String action;
+    private final DateConstraint dateConstraint;
+    private int times;
     public static final String CONDITION_SEPARATOR_AND = "<&& />";
 
     /**
@@ -51,7 +50,7 @@ public class Rule {
      * @return true se le regole vengono verificate positivamente
      */
     public boolean check(HashMap<String, String> variables, String changedVariable) {
-        ///-{ Controlliamo che il trigger sia pertinente
+        // Controlliamo che il trigger sia pertinente
         if (condition == null) {
             return true;
         }
@@ -76,7 +75,7 @@ public class Rule {
             return false;
         }
 
-        ///-{ Analizziamo il trigger
+        // Analizziamo il trigger
         for (Condition r : condition) {
             if (!check(r, variables)) {
                 return false;
@@ -113,15 +112,15 @@ public class Rule {
 
     @Override
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         if (condition != null) {
             for (Condition r : condition) {
-                output += r.toString() + " ";
+                output.append(r.toString()).append(" ");
             }
         }
-        output = "Rule:[" + name + "]; Conditions:[" + output.trim() + "]; Action:[" + action + "]; "
-                + "DateConstraint:[" + dateConstraint + "]; Times:[" + times + "];";
+        output = new StringBuilder("Rule:[" + name + "]; Conditions:[" + output.toString().trim() + "]; Action:[" + action + "]; "
+                                   + "DateConstraint:[" + dateConstraint + "]; Times:[" + times + "];");
 
-        return output;
+        return output.toString();
     }
 }

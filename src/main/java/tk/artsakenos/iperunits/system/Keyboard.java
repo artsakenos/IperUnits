@@ -326,10 +326,4 @@ public class Keyboard {
         }).start();
     }
 
-    ///-------------------------------------------------------------------------
-
-    public static void main(String[] args) {
-        Write("@");
-
-    }
 }

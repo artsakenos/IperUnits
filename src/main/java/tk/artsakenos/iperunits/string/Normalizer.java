@@ -46,7 +46,7 @@ public class Normalizer {
      *
      * @param text        Il testo da normalizzare
      * @param punctuation Indica se si vuole lasciare la punteggiatura (che
-     *                    sara' comunque semplificata)
+     *                    sarà comunque semplificata)
      * @param numbers     Indica se si vogliono lasciare i numeri
      * @return Il testo normalizzato
      */
@@ -60,7 +60,7 @@ public class Normalizer {
             sb.append(normalizeWord(word, punctuation, numbers)).append(" ");
         }
 
-        String output = " " + sb.toString() + " ";
+        String output = " " + sb + " ";
 
         while (output.contains("  ")) {
             output = output.replaceAll(" {2}", " ");
@@ -121,7 +121,7 @@ public class Normalizer {
 
         if (!punctuation) {
             // word = word.replaceAll("\\W*", "");
-            word = word.replaceAll("[\\W*&&[^']]", " ");
+            word = word.replaceAll("\\W*&&[^']", " ");
         }
         if (!numbers) {
             word = word.replaceAll("\\d*", " ");

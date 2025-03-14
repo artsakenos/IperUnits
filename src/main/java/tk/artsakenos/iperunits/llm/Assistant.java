@@ -15,9 +15,8 @@ import static tk.artsakenos.iperunits.string.SuperDate.now;
 
 /**
  * Mette a disposizione dei metodi di default che si basano sullo standard OpenAI che vale per molti LLM.
- * Altrimenti si possono overridare.
+ * Altrimenti si possono sovrascrivere all'occorrenza.
  */
-@SuppressWarnings("unused")
 @Data
 public abstract class Assistant {
 
@@ -49,7 +48,6 @@ public abstract class Assistant {
             Message.Role role = message.getRole();
             if (role == Message.Role.error || role == Message.Role.context) continue;
             messagesEnvelope.add(Map.of("role", role, "content", message.getText()));
-            // lastQueriesTokens += aiMessage.getText().length() / 4;
         }
         Map<String, Object> requestObject = Map.of(
                 "model", getModel(),

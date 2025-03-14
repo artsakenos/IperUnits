@@ -8,6 +8,7 @@ package tk.artsakenos.iperunits.serial;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.java.Log;
 import tk.artsakenos.iperunits.file.SuperFileText;
 
 import java.io.File;
@@ -20,8 +21,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static tk.artsakenos.iperunits.file.SuperLog.log;
-
 /**
  * Un oggetto Jsonable può fornire una sua descrizione in formato Json. Basta
  * fare un POJO con getter e setter, estendere questa classe e utilizzare i
@@ -30,7 +29,7 @@ import static tk.artsakenos.iperunits.file.SuperLog.log;
  *
  * @author Andrea
  */
-@SuppressWarnings("unused")
+@Log
 public class Jsonable implements Serializable {
 
     public JsonNode toJsonNode() {
@@ -82,7 +81,7 @@ public class Jsonable implements Serializable {
         try {
             node = mapper.readTree(json);
         } catch (IOException ex) {
-            log("UltraHttp Client ERROR", "getJsonNodeByPath('" + json + "', '" + path + "'): " + ex.getLocalizedMessage());
+            log.severe("getJsonNodeByPath('" + json + "', '" + path + "'): " + ex.getLocalizedMessage());
             return null;
         }
         return getJsonNodeByPath(node, path);

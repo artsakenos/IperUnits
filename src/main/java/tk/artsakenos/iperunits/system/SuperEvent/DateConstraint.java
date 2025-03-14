@@ -4,8 +4,10 @@
  */
 package tk.artsakenos.iperunits.system.SuperEvent;
 
+import lombok.Setter;
 import tk.artsakenos.iperunits.string.SuperDate;
 import tk.artsakenos.iperunits.string.SuperString;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +15,7 @@ import java.util.HashMap;
 
 /**
  * This class allows to define Date/Time constraints.
- *
+ * <p>
  * An example: of use:
  * <pre>
  * dc.addConstraint("START 2009-08-13 20:09:31");
@@ -40,13 +42,18 @@ public class DateConstraint {
     public static final int DC_HOUR_OF_DAY = 400;
     public static final int DC_DAY_OF_WEEK = 500;
     public static final int DC_DAY_OF_MONTH = 600;
-    // public static final int DC_DAY_OF_YEAR = 700; No! Pu� sfuorare.
+    // public static final int DC_DAY_OF_YEAR = 700; No! Può sforare.
     public static final int DC_MONTH = 800;
     public static final int DC_YEAR = 0;
+
+    @Setter
     private Date start = null;
+
+    @Setter
     private Date end = null;
-    private final HashMap<String, Integer> DC_StringToInt = new HashMap<String, Integer>();
-    private final ArrayList<Integer> constraints = new ArrayList<Integer>();
+
+    private final HashMap<String, Integer> DC_StringToInt = new HashMap<>();
+    private final ArrayList<Integer> constraints = new ArrayList<>();
 
     public DateConstraint() {
         DC_StringToInt.put("SECOND", DC_SECOND);
@@ -61,7 +68,7 @@ public class DateConstraint {
     }
 
     /**
-     * Istanzia DateConstraints e imposta subito i costraint partendo dal
+     * Istanzia DateConstraints e imposta subito i constraint partendo dal
      * parametro
      *
      * @param date_constraints I constraints impostati come stringa
@@ -94,7 +101,7 @@ public class DateConstraint {
         cNow.setTime(now);
         ArrayList<Integer> nowConstraints = getDateConstraint(cNow);
 
-        ///-{ Facciamo una lista delle categorie che passano
+        // Facciamo una lista delle categorie che passano
         ArrayList<Integer> categoryConstraints = new ArrayList<>();
         for (int constraint : constraints) {
             if (nowConstraints.contains(constraint)) {
@@ -145,26 +152,12 @@ public class DateConstraint {
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
-    /**
-     * @param start the start to set
-     */
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    /**
-     * @param end the end to set
-     */
-    public void setEnd(Date end) {
-        this.end = end;
-    }
 
     /**
      * Aggiunge un time constraint.
      *
      * @param constraintType Il tipo del constraint preso da DC_
-     *
-     * @param constraint Il valore del costraint (in ore, minuti, etc...)
+     * @param constraint     Il valore del constraint (in ore, minuti, etc...)
      */
     public void addConstraint(int constraintType, int constraint) {
         constraints.add(constraintType + constraint);
@@ -243,20 +236,20 @@ public class DateConstraint {
             return "";
         }
 
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (Integer i : constraints) {
-            output += "," + DateConstraintToString(i);
+            output.append(",").append(DateConstraintToString(i));
         }
 
         if (start != null) {
-            output += ",START " + SuperDate.DateToStringDatabase(start);
+            output.append(",START ").append(SuperDate.DateToStringDatabase(start));
         }
         if (end != null) {
-            output += ",END " + SuperDate.DateToStringDatabase(end);
+            output.append(",END ").append(SuperDate.DateToStringDatabase(end));
         }
 
-        output = output.substring(1);
-        return output;
+        output = new StringBuilder(output.substring(1));
+        return output.toString();
     }
 
 }

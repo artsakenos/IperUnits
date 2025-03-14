@@ -5,16 +5,14 @@
  */
 package tk.artsakenos.iperunits.serial;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Andrea
- * @version Apr 24, 2020
+ * @version Apr 03, 2024
+ * @since Apr 24, 2020
  */
 @SuppressWarnings("unused")
 public class Hash {
@@ -23,24 +21,23 @@ public class Hash {
      * Compute Hash of the Data according to the selected Algorithm, e.g.,
      * SHA256.
      *
-     * @param dataToHash The Data to Hash
-     * @return Hash of the data
+     * @param text      The Text to Hash
+     * @param algorithm The Algorithm, e.g., SHA256 (if null)
+     * @return The Hash of the Text
      */
-    public static String computeHash(String algorithm, String dataToHash) {
-        MessageDigest digest;
-        byte[] bytes;
+    public static String hash(String text, String algorithm) {
+        if (algorithm == null || algorithm.isEmpty()) algorithm = "SHA256";
         try {
-            digest = MessageDigest.getInstance(algorithm);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Hash.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            byte[] encodedHash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
+            for (byte b : encodedHash) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(algorithm + " algorithm not available", e);
         }
-        bytes = digest.digest(dataToHash.getBytes(UTF_8));
-        StringBuilder buffer = new StringBuilder();
-        for (byte b : bytes) {
-            buffer.append(String.format("%02x", b));
-        }
-        return buffer.toString();
     }
 
 }

@@ -7,6 +7,7 @@ import tk.artsakenos.iperunits.llm.Message;
 import tk.artsakenos.iperunits.serial.Jsonable;
 import tk.artsakenos.iperunits.web.SuperHttpClient;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,16 @@ import java.util.Map;
 /**
  * <a href="https://ai.google.dev/docs/gemini_api_overview">...</a>
  * <a href="https://ai.google.dev/tutorials/rest_quickstart">...</a>
- * Il multipart del context, a google lo chiamano multiturn
+ * Il multipart del context, a Google lo chiamano multi-turn
  */
 public class Google extends Assistant {
 
-    public final String URL_GENERATE = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
     public final String URL_VISION = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent";
+    public static final String URL_GENERATE = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s";
 
-    public static final String MODEL_GEMINIPRO = "gemini-pro";
-    public static final String MODEL_GEMINIPRO_VISION = "gemini-pro-vision";
+    public static final String MODEL_GEMINI_20_FLASH = "gemini-2.0-flash";
+    // public static final String MODEL_GEMINIPRO = "gemini-pro";
+    // public static final String MODEL_GEMINIPRO_VISION = "gemini-pro-vision";
 
     public Google(String apiKey, String model) {
         setProvider("Google");
@@ -56,7 +58,7 @@ public class Google extends Assistant {
         if (query != null && query.hasImage()) {
             return URL_VISION + "?key=" + getApikey();
         }
-        return URL_GENERATE + "?key=" + getApikey();
+        return URL_GENERATE.formatted(getModel(), getApikey());
     }
 
     /**
@@ -69,44 +71,57 @@ public class Google extends Assistant {
      */
     @Override
     public String getJsonRequest(Conversation conversation) {
-        // Per ora la faccio semplice, ma vedi Postman per il multipart!
-        // String question = aiEnvelope.getQuery().getContent();
+        // Per ora gestisco solo il text, vedi Postman per il multipart!
+        // Take into account that Conversation extends LinkedList<Message>
         LinkedList<Object> contents = new LinkedList<>();
-        Map<String, Object> content_section = null;
+
         for (Message message : conversation) {
-            String role = message.getRole().name();
-            if (role.equals("system")) role = "user";
-            if (role.equals("assistant")) role = "model";
-            if (content_section != null
-                    && content_section.get("role") != null
-                    && content_section.get("role").equals(role)) {
-                contents.removeLast();
-            }
+            // Il contenuto contiene solo messaggi di utente e model, non errori o prompt di sistema
+            if (message.getRole() != Message.Role.assistant && message.getRole() != Message.Role.user)
+                continue;
 
-            List<Map<String, Object>> parts = new java.util.ArrayList<>(List.of(Map.of("text", message.getText())));
-            Message query = conversation.getLast(Message.Role.user);
+            String role = message.getRole() == Message.Role.assistant ? "model" : "user";
 
-            if (query.hasImage()) {
-                String image_b64 = query.getParts().get(Message.Type.image);
-                String[] image = toImageTypeContent(image_b64);
-                Map<String, Object> inline_image = Map.of(
-                        "mime_type", image[0],
-                        "data", image[1]
-                );
-                parts.add(Map.of("inline_data", inline_image));
-            }
+            // Create parts list with the message text
+            Map<String, Object> textPart = Map.of("text", message.getText());
+            List<Object> parts = List.of(textPart);
 
-            content_section = Map.of(
+            // Create a content section for this message
+            Map<String, Object> content_section = Map.of(
                     "role", role,
                     "parts", parts
             );
+
+            // Add to contents list
             contents.add(content_section);
         }
 
-        Map<String, Object> story = Map.of("contents", contents);
-        return Jsonable.toJson(story, true);
-    }
+        // Default generation config values
+        Map<String, Object> generationConfig = Map.of(
+                "maxOutputTokens", 8192,
+                "responseMimeType", "text/plain",
+                "temperature", 1,
+                "topK", 40,
+                "topP", 0.95
+        );
 
+        // Check if there's a system prompt message
+        Message systemPrompt = conversation.getLast(Message.Role.system);
+
+        // Creare una mappa mutabile
+        HashMap<String, Object> requestWrap = new HashMap<>();
+        requestWrap.put("contents", contents);
+        requestWrap.put("generationConfig", generationConfig);
+
+        // Add system instruction if present
+        if (systemPrompt != null) {
+            Map<String, Object> systemPart = Map.of("text", systemPrompt.getText());
+            Map<String, Object> systemInstructionWrap = Map.of("parts", List.of(systemPart));
+            requestWrap.put("systemInstruction", systemInstructionWrap);
+        }
+
+        return Jsonable.toJson(requestWrap, true);
+    }
 
 
     public Map<String, String> getHeaders() {
@@ -121,6 +136,5 @@ public class Google extends Assistant {
         String answer = rootNode.at("/candidates/0/content/parts/0/text").asText();
         return new Message(this, Message.Role.assistant, Map.of(Message.Type.text, answer));
     }
-
 
 }

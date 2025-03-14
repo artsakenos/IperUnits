@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
  * @author Andrea, 11 marzo 2005, 13.02
  * @version 2019.03.01
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class SuperDate {
 
     public final static String SD_DATABASE = "yyyy-MM-dd HH:mm:ss";

@@ -150,10 +150,10 @@ public class Chronometer {
 
         String timeStart = Chronometer.dateToTimeCounterString(timeBegin);
         String timeNow = Chronometer.dateToTimeCounterString(now());
-        String timeMillisec = "" + getTimePassedMillisecs();
+        String timeMilliseconds = "" + getTimePassedMillisecs();
 
         return "ID Chronometer - Start (" + timeStart + "), Now ("
-                + timeNow + "), Chronometer (" + timeChrono + " - " + timeMillisec + ")";
+               + timeNow + "), Chronometer (" + timeChrono + " - " + timeMilliseconds + ")";
     }
     //----------------------------------------------------------------------------------------------
     //------------  Utilities per eventuali counters

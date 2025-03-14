@@ -5,97 +5,84 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import tk.artsakenos.iperunits.initors.SuperProperties;
-import tk.artsakenos.iperunits.llm.models.*;
 
+import java.util.List;
+
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @Disabled
 @Log
 public class TestLLM {
 
     private final static LlmService llmService = new LlmService();
-    private static final AvailableModels availableModels = new AvailableModels();
+    private final static HelperAvailableModels availableModels = new HelperAvailableModels();
     private static Assistant assistant;
 
 
     @BeforeAll
     public static void setup() {
-        // Make some Available Models
-        Assistant groq = new Groq(
-                SuperProperties.get("infodev.properties", "APIKEY_GROQ", null),
-                Groq.MODEL_LLAMA3_8B);
-        Assistant cerebras = new Cerebras(
-                SuperProperties.get("infodev.properties", "APIKEY_CEREBRAS", null),
-                Cerebras.MODEL_LLAMA_8B);
-        Assistant google = new Google(
-                SuperProperties.get("infodev.properties", "APIKEY_GOOGLE", null),
-                Google.MODEL_GEMINIPRO);
-        Assistant anthropic = new Anthropic(
-                SuperProperties.get("infodev.properties", "APIKEY_ANTHROPIC", null),
-                Anthropic.MODEL_CLAUDE3_OPUS);
-        Assistant cohere = new Cohere(
-                SuperProperties.get("infodev.properties", "APIKEY_COHERE", null),
-                Cohere.MODEL_AYA_8);
-        Assistant deepseek = new Deepseek(
-                SuperProperties.get("infodev.properties", "APIKEY_DEEPSEEK", null),
-                Deepseek.MODEL_CHAT);
-
-        availableModels.put("Groq LLama3 8B", groq);
-        availableModels.put("Cerebras LLama3 8B", cerebras);
-        availableModels.put("Google Gemini", google);
-        availableModels.put("Anthropic Claude", anthropic);
-        availableModels.put("Cohere", cohere);
-        availableModels.put("Deepseek", deepseek);
+        Assistant groq = availableModels.get("groq_llama3_8b");
+        Assistant google = availableModels.get("google_gemini_20_flash");
 
         assistant = groq;
-        llmService.addMessage(assistant, Message.Role.system, "Sei un assistente fenomenale, e rispondi sempre in italiano perfetto.");
-        llmService.addMessage(assistant, Message.Role.assistant, "Eccomi come stai oggi?");
-        llmService.addMessage(assistant, Message.Role.user, "Sto molto bene grazie! Ho un po' di maldipancia");
-        llmService.addMessage(assistant, Message.Role.assistant, "Hai provato ad andare da un medico?");
-        llmService.addMessage(assistant, Message.Role.user, "Si sono dal medico, ora quando ti chiedo qualcosa rispondi a lui in spagnolo!.");
-        llmService.addMessage(assistant, Message.Role.assistant, "Va bene chiedimi pure!?");
+        llmService.addMessage(google, Message.Role.system, "Sei Vincenzo, un assistente medico con una preparazione incredibile, sempre sicuro di te, sei madrelingua spagnolo e non conosci altre lingue, rispondi sempre in spagnolo.");
+        llmService.addMessage(google, Message.Role.assistant, "Hola que tal hoy?");
+        llmService.addMessage(google, Message.Role.user, "Sto molto bene grazie! Ho un po' di maldipancia");
+        llmService.addMessage(google, Message.Role.assistant, "Has probado a comer tu medicina?");
+        llmService.addMessage(google, Message.Role.user, "Si ma ha auto alcuni effetti collaterali, vorrei provare qualcos' altro!.");
+        llmService.addMessage(google, Message.Role.error, "QUI MOCK ERRORE GENERICO DI SISTEMA!");
+        llmService.addMessage(google, Message.Role.assistant, "Vale, pregunta lo que quieres!?");
     }
 
     @Test
     void testGroq() {
-        assistant = availableModels.get("Groq LLama3 8B");
-        llmService.addMessage(assistant, Message.Role.user, "Sto visitando il paziente, hai qualche consiglio?");
+        assistant = availableModels.get("groq_llama3_8b");
     }
 
     @Test
     void testCerebras() {
-        assistant = availableModels.get("Cerebras LLama3 8B");
-        llmService.addMessage(assistant, Message.Role.user, "Sto visitando il paziente, hai qualche consiglio?");
+        assistant = availableModels.get("cerebras_llama31_8b");
     }
 
     @Test
     void testGoogle() {
-        assistant = availableModels.get("Google Gemini");
-        llmService.addMessage(assistant, Message.Role.user, "Sto visitando il paziente, hai qualche consiglio?");
+        assistant = availableModels.get("google_gemini_20_flash");
     }
 
     @Test
     void testAnthropic() {
-        assistant = availableModels.get("Anthropic Claude");
-        llmService.addMessage(assistant, Message.Role.user, "Sto visitando il paziente, hai qualche consiglio?");
+        assistant = availableModels.get("claude");
     }
 
     @Test
     void testCohere() {
-        assistant = availableModels.get("Cohere");
-        llmService.addMessage(assistant, Message.Role.user, "Sto visitando il paziente, hai qualche consiglio?");
+        assistant = availableModels.get("cohere");
     }
 
     @Test
     void testDeepseek() {
-        assistant = availableModels.get("Deepseek");
-        llmService.addMessage(assistant, Message.Role.user, "Sto visitando il paziente, hai qualche consiglio?");
+        assistant = availableModels.get("deepseek");
     }
 
     @AfterAll
     public static void results() {
+        llmService.addMessage(assistant, Message.Role.user, "Ora ho maldipancia, ma solo la sera, hai qualche consiglio?");
         log.info("Answer: " + llmService.query());
         log.info("Conversation: " + llmService.getConversation());
 
+    }
+
+    @Test
+    void testLlmRouter() {
+        LlmRouter llmRouter = new LlmRouter(List.of(
+                availableModels.get("Groq LLama3 8B"),
+                availableModels.get("Cerebras LLama3 8B")
+        ));
+        String question = "Ciao sono il tuo nuovo amico francese, per favore parlami in francese";
+        String answer = llmRouter.query("user01", question);
+        System.out.println(question + "\n    > " + answer);
+        question = "mi dici come si fa la pizza?";
+        answer = llmRouter.query("user01", question);
+        System.out.println(question + "\n    > " + answer);
     }
 
 }

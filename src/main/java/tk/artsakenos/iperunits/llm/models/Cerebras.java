@@ -15,8 +15,8 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class Cerebras extends Assistant {
 
-    public static final String MODEL_LLAMA_8B = "llama3.1-8b"; // Context Length: 8192
-    public static final String MODEL_LLAMA_70B = "llama3.1-70b"; // Context Length: 8192
+    public static final String MODEL_LLAMA_31_8B = "llama3.1-8b"; // Context Length: 8192
+    public static final String MODEL_LLAMA_33_70B = "llama-3.3-70b"; // Context Length: 8192
 
     public Cerebras(String apiKey, String model) {
         setProvider("cerebras");

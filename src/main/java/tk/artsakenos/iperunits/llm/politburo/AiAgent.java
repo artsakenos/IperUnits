@@ -24,7 +24,8 @@ public class AiAgent {
     public enum Role {
         AGENT, // A normal agent
         COORDINATOR, // A coordinato, i.e., a Chairman
-        TOOL // A Tool agent, execute  operations such as create files, send emails...
+        TOOL, // A Tool agent, execute  operations such as create files, send emails...
+        USER // A User. The user can interact with the other agents
     }
 
 }

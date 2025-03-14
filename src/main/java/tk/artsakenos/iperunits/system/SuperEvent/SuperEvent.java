@@ -11,19 +11,19 @@ import java.util.HashMap;
  * Attenzione: Se si creano due istanze di SuperEvent comunque le variabili
  * statiche vengono conservate. Quindi usare una sola istanza per ora.
  *
- * @author addis
+ * @author Andrea
  */
 public class SuperEvent {
 
-    private final HashMap<String, Rule> rules = new HashMap<String, Rule>();
-    private final HashMap<String, String> variables = new HashMap<String, String>();
+    private final HashMap<String, Rule> rules = new HashMap<>();
+    private final HashMap<String, String> variables = new HashMap<>();
 
     /**
      * Appena cambia lo stato di una variabile si fa il check di quelle regole
      * che la contengono.
      *
      * @param variable La chiave da modificare
-     * @param value Il nuovo valore
+     * @param value    Il nuovo valore
      * @return una lista si actions corrispondenti alle rules triggerate
      */
     public ArrayList<String> set(String variable, String value) {
@@ -57,10 +57,10 @@ public class SuperEvent {
 
     @Override
     public String toString() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (String t : rules.keySet()) {
-            output += rules.get(t) + "\n";
+            output.append(rules.get(t)).append("\n");
         }
-        return output;
+        return output.toString();
     }
 }

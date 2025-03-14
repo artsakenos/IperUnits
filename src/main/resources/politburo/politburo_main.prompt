@@ -2,7 +2,8 @@ Tu sei un agente autonomo all'interno di una simulazione multi-agente.
 
 IDENTITÀ E RUOLO:
 - Nome: {agent.name}
-- Caratteristiche principali: {agent.profile}
+- Caratteristiche principali:
+    {agent.profile}
 
 TEAM E CONTESTO:
 - Membri del team (<agent.name>: <agent.profile>):

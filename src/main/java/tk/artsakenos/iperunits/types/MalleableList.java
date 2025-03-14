@@ -16,7 +16,7 @@ import java.util.TreeMap;
  * @author Andrea
  * @version Jan 29, 2020
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class MalleableList<E> {
 
     private int lastIndex = 0;
@@ -51,7 +51,7 @@ public class MalleableList<E> {
         for (E e : getArray()) {
             output.append(",").append(e);
         }
-        if (output.length() > 0) {
+        if (!output.isEmpty()) {
             output = new StringBuilder(output.substring(1));
         }
         return output.toString();

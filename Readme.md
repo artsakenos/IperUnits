@@ -1,55 +1,61 @@
-
 # Introduzione
 
 [![](https://jitpack.io/v/artsakenos/IperUnits.svg)](https://jitpack.io/#artsakenos/IperUnits)
 
-**IperUnits** ([JavaDocs](https://artsakenos.github.io/ultra_lib_docs/IperUnits/index.html)) è una libreria Java multi purpose, progettata per soddisfare esigenze applicative.
-Include una serie di strumenti generici per semplificare lo sviluppo di applicazioni.
+**IperUnits** ([JavaDocs](https://artsakenos.github.io/ultra_lib_docs/IperUnits/index.html)) è una libreria Java multi-purpose,
+una suite di strumenti progettata per soddisfare le esigenze applicative e semplificare l'integrazione di funzionalità di base.
 
 ## Caratteristiche principali:
 
-- **Audio Sampling**: Funzionalità per la gestione e l'analisi di campioni audio e sequenze midi.
-- **Gestione Database**: Supporto per Sqlite, H2, file CSV, e modelli di tabelle.
-- **Gestione File e Directory**: Utility per lavorare con file, directory, archivi ZIP e operazioni di parsing.
-- **Gestione Form e Grafica Swing**: Strumenti per la creazione e gestione di interfacce utente (UI) con Swing, e utility per migliorare l’esperienza dell'utente.
-- **Gestione Inizializzatori e Proprietà**: Sistemi per gestire configurazioni e proprietà di applicazioni in modo semplice anche su cloud.
-- **Modelli LLM e Agenti**: Integrazione con modelli linguistici di grandi dimensioni (LLM), agenti intelligenti, routing e retrieval-augmented generation (RAG).
-- **Serializzazione e Modellazione JSON**: Supporto per la serializzazione, la modellazione di oggetti JSON, cifratura e bitwise operations.
-- **Manipolazione Stringhe e Normalizzazione**: Funzionalità per formattare, normalizzare e manipolare stringhe, inclusi grammatica, sillabazione, tokenizzazione, formattazione date.
-- **Utility di Sistema**: Strumenti per timer, profiler, interazione con l’ambiente umano e integrazione con la Java PowerShell. Sistema di gestione eventi e periferiche hardware.
-- **Estensioni per Collezioni e Tipi di Dati**: Astrazione di liste, mappe e tipi di dati personalizzati.
-- **Librerie Web**: Strumenti per client-server, blockchain, Delgado, utility web e gestione di archivi online.
-
+- **Audio Sampling**: Gestione completa di campioni audio e sequenze MIDI.
+- **Gestione Database**: Supporto per Sqlite, H2, file CSV e modelli di tabelle.
+- **Gestione File e Directory**: Utility per operazioni su file, directory, archivi ZIP e parsing avanzato.
+- **Gestione Form e Grafica Swing**: Suite completa per la creazione e gestione di interfacce utente con Swing.
+- **Gestione Inizializzatori e Proprietà**: Sistema avanzato per la gestione di configurazioni e proprietà applicative, con supporto cloud.
+- **[Modelli LLM e Agenti](./src/main/java/tk/artsakenos/iperunits/llm/Readme.md)**: 
+    Integrazione con Large Language Models (LLM), 
+    [agenti intelligenti](https://infodev.wordpress.com/2023/11/15/ai-agents/), routing e Retrieval-Augmented Generation (RAG).
+- **Serializzazione e Modellazione JSON**: Framework completo per serializzazione, modellazione JSON, cifratura e operazioni bitwise.
+- **Manipolazione Stringhe e Normalizzazione**: Strumenti avanzati per elaborazione di stringhe, grammatica, sillabazione, tokenizzazione e formattazione date.
+- **[Utility di Sistema](./src/main/java/tk/artsakenos/iperunits/system/Readme.md)**: 
+    Suite di strumenti per timing, profiling, interazione con l'ambiente e integrazione PowerShell.
+    Sistema completo per gestione eventi e periferiche.
+- **Estensioni per Collezioni e Tipi di Dati**: Framework esteso per la gestione di liste, mappe e tipi personalizzati.
+- **Librerie Web**: Strumenti completi per operazioni client-server, blockchain, Delgado e gestione archivi online.
+- **GUIs**: Some ready to use graphics user interface, come Humanizer. Ricorda di impostare `-Djava.awt.headless=false` nelle chiamate da headless applications.
 
 ## Ecosistema
 
-L'ecosistema comprende un insieme di librerie progettate per rispondere a diverse necessità nello sviluppo di applicazioni,
+L'ecosistema comprende un insieme di librerie progettate per rispondere a diverse esigenze nello sviluppo di applicazioni,
 dalla gestione di dati e risorse multimediali alla creazione di applicazioni intelligenti.
-Ogni modulo offre funzionalità specifiche che possono essere facilmente integrate in progetti Java o Android.
+Ogni modulo offre funzionalità specifiche integrabili in progetti Java o Android.
 
-* **UltraAnalysis** ([docs](https://artsakenos.github.io/ultra_lib_docs/UltraAnalysis/index.html)) - Classificatori bayesiani, feature selectors, analisi del testo, POS tagging, generazione grafi, wrapper per social network.
+Molte librerie sono state reingegnerizzate, o deprecate in favore di nuove tecnologie
+(ad esempio UltraNeuro utilizza versioni obsolete di TensorFlow e tecniche superate,
+mentre UltraImage si basa su tecniche di Pattern Recognition e versioni di OpenCV da aggiornare).
+Queste verranno progressivamente incorporate nelle IperUnits o riscritte all'interno di nuove librerie,
+integrate negli UltraServices o in nuove applicazioni.
+
+* **UltraAnalysis** ([docs](https://artsakenos.github.io/ultra_lib_docs/UltraAnalysis/index.html)) - Classificatori bayesiani, feature selectors, analisi del testo, POS tagging, generazione grafi, wrapper per social network. See e.g., [UltraGram](https://infodev.wordpress.com/2018/04/05/ultracms-uscenno-release/), [SuperReddit](https://infodev.wordpress.com/2017/01/20/esperimenti-con-reddit/), [FacebookPromoter](https://infodev.wordpress.com/2015/07/10/facebook-promoter/).
 * **UltraHttp** ([docs](https://artsakenos.github.io/ultra_lib_docs/UltraHttp/index.html)) - Client-server, wrapper per CMS, suite di plugin per l'estensione dei microservizi e db noSQL, API per Google e Delgado.
-* **UltraNeuro** - Comprende **UltraNeuroApps** e **AppsDL** per deep learning e reti neurali.
-* **UltraImage** - Libreria per elaborazione e analisi di immagini.
-* **UltraCMS** ([docs](https://artsakenos.github.io/ultra_lib_docs/UltraCMS/index.html)) - Framework per CMS, con sistema di template e supporto plugin.
+* **UltraNeuro** - Comprende **UltraNeuroApps** e **AppsDL** per deep learning e reti neurali (see, e.g., [Borgs](https://infodev.wordpress.com/2018/04/15/borgs/), [Java AI Libraries](https://infodev.wordpress.com/2018/04/10/testing-some-java-ai-libraries/)).
+* **UltraImage** - Libreria per elaborazione e analisi di immagini (see, e.g., [UltraGram](https://infodev.wordpress.com/2020/12/05/ultragram-bot-intergeptor-deluxe-2020/), [UltraCam - CodaDellOcchio](https://infodev.wordpress.com/2013/11/05/ultracam/)).
+* **UltraCMS** ([docs](https://artsakenos.github.io/ultra_lib_docs/UltraCMS/index.html)) - ([article](https://infodev.wordpress.com/2018/04/05/ultracms-uscenno-release/)) Framework per CMS, con sistema di template e supporto plugin, see, e.g., CrisiDiGoverno.
 * **UltraHook** - Strumenti di hooking e gestione di eventi di sistema, delle applicazioni, del clibpboard.
-* **IperLibroid** ([docs](https://artsakenos.github.io/ultra_lib_docs/IperLibroid/index.html)) - Librerie general purpose per lo sviluppo Android.
+* **IperLibroid** ([docs](https://artsakenos.github.io/ultra_lib_docs/IperLibroid/index.html)) - Librerie IperLibroid general purpose per lo sviluppo Android e SwissArmyKnife App Iperoid.
 
-
-## Applicazioni
-
-Alcune applicazioni costruite sopra le librerie, sono ad esempio:
-* IperApps
-* UltraServices
+E altre librerie e applicazioni:
+* **UltraWemo** ([github](https://github.com/artsakenos/UltraWemo)) - allows you to control your WeMo Devices with a pure Java library with no dependencies.
+* **UltraChess** - wrapper di Stockfish in Java
+* **IperApps** - Uan suite di micro servizi per il sistema operativo
+* [**UltraServices**](https://github.com/artsakenos/UltraServices) - Una suite di servizi e framework applicativi (per Java, Python, JS, React) containerizzata e distribution ready.
 
 
 # Utilizzo
 Le IperUnits possono essere
 1. Distribuite come jar. Compilate con Maven,
-   per la build di un fat jar, viene usato il plugin maven-assembly-plugin
-   (vedi tutto il <build> dal pom.xml, con la main class).
+   per la build viene usato il plugin maven-assembly-plugin, vedi `pom.xml::build`.
 2. Incorporate dal mio virtual maven repository:
-   Aggiungere il repository
 ```xml    
 <repositories>
     <repository>
@@ -61,7 +67,7 @@ Le IperUnits possono essere
     </repository>
 </repositories>
 ```
-e aggiungere le dipendenze (anche di una delle sotto librerie disponibili)
+aggiungendo le dipendenze (anche di una delle sotto librerie disponibili)
 ```xml    
 <dependencies>
     <dependency>
@@ -73,7 +79,6 @@ e aggiungere le dipendenze (anche di una delle sotto librerie disponibili)
 ```
 
 3. Incorporate tramite JitPack:
-   Aggiungere il repository
 ```xml    
 <repositories>
   <repository>
@@ -82,14 +87,14 @@ e aggiungere le dipendenze (anche di una delle sotto librerie disponibili)
   </repository>
 </repositories>
 ```
-e aggiungere le dipendenze
+aggiungendo le dipendenze
 ```xml    
 <dependencies>
-  <dependency>
-    <groupId>com.github.artsakenos</groupId>
-    <artifactId>IperUnits</artifactId>
-    <version>2024.11</version>
-  </dependency>
+   <dependency>
+      <groupId>com.github.artsakenos</groupId>
+      <artifactId>IperUnits</artifactId>
+      <version>2024.03</version>
+   </dependency>
 </dependencies>
 ```
 4. Tramite il Github Packaging - Forse in futuro.
@@ -100,21 +105,23 @@ Per l'utilizzo di alcune funzionalità e per il testing utilizzare il file di co
 Si puó creare un file default mediante test TestSuperProperties.
 
 
-
 # Notes, Credits, and Todo
 
 **JavaDocs** -
-Inserire i parametri: -Xdoclint:none -encoding UTF-8 -charset UTF-8
+Compilare con i parametri:
+`--Xdoclint:none -encoding UTF-8 -charset UTF-8 -doctitle "IperUnits ver. 2022.01" -windowtitle "IperUnits Libraries"`
 
 **Release Tagging**
-- Aggiorna il JitPack shield
-- git commit -am "Release 2024.03" && git push origin main
-- git tag -a 2024.03 -m "Release 2024.03" && git push origin 2024.03
-- Check on [JitPack](https://jitpack.io/#artsakenos/IperUnits) - (pom.xml)[https://jitpack.io/com/github/artsakenos/IperUnits/2024.03/pom.xml]
+
+1. Aggiorna la versione su `pom.xml`
+2. `git commit -am "Release 2024.03" && git push origin main`
+3. `git tag -a 2024.03 -m "Release 2024.03" && git push origin 2024.03`
+4. Check on [JitPack](https://jitpack.io/#artsakenos/IperUnits) - (pom.xml)[https://jitpack.io/com/github/artsakenos/IperUnits/2024.03/pom.xml]
 
 
 ## Java Shell
 
+```bash
 [1]-> /classpath .\dist\JavaTest.jar
 |  Path '.\dist\JavaTest.jar' added to classpath
 [1]-> import javatest.JavaTest;
@@ -122,8 +129,12 @@ Inserire i parametri: -Xdoclint:none -encoding UTF-8 -charset UTF-8
 |  jt ==> javatest.JavaTest@2de8284b
 [3]-> jt.main(new String[]{});
 [4]-> (my method just prints something on the terminal output)
+```
 
-## Build a Fat Jar
+
+## Fat Jar Release
+
+Aggiungere il maven-assembly-plugin, modificare la main class.
 
 ```xml    
 <build>

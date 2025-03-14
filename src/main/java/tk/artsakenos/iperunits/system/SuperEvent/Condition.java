@@ -4,13 +4,15 @@
  */
 package tk.artsakenos.iperunits.system.SuperEvent;
 
+import lombok.Getter;
+
 /**
  * TODO: Il confronto viene fatto convertendo in numero, altrimenti confronto
  * tra stringhe!
  *
  * @author Andrea
- *
  */
+@Getter
 public class Condition {
 
     public static final String WILDCARD = "*";
@@ -22,10 +24,11 @@ public class Condition {
     public static final String OP_DIFFERENT = "<>";
     public static final String OP_STRING_STARTSWITH = "SW";
     public static final String OP_STRING_CONTAINS = "SC";
+
     //----------------------------------------------------------------------
-    private String variable = "";
-    private String operator = "";
-    private String value = "";
+    private final String variable;
+    private final String operator;
+    private final String value;
 
     public Condition(String variable, String operator, String value) {
         this.variable = variable;
@@ -80,33 +83,10 @@ public class Condition {
                 }
             }
             if (getOperator().equals(OP_STRING_CONTAINS)) {
-                if (setValue.contains(value)) {
-                    return true;
-                }
+                return setValue.contains(value);
             }
         }
         return false;
-    }
-
-    /**
-     * @return the variable
-     */
-    public String getVariable() {
-        return variable;
-    }
-
-    /**
-     * @return the operator
-     */
-    public String getOperator() {
-        return operator;
-    }
-
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
     }
 
     @Override

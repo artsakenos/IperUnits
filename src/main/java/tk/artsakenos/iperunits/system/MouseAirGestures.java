@@ -5,10 +5,10 @@
 package tk.artsakenos.iperunits.system;
 
 import tk.artsakenos.iperunits.types.Fifo;
-import java.awt.Point;
+
+import java.awt.*;
 
 /**
- *
  * @author Andrea
  */
 public abstract class MouseAirGestures {
@@ -24,18 +24,13 @@ public abstract class MouseAirGestures {
     public static final int E_ALWAYS_DOWN = 8;
 
     public static String nameCorner(int event) {
-        switch (event) {
-            case 1:
-                return "Corner Up Left";
-            case 2:
-                return "Corner Down Left";
-            case 4:
-                return "Corner Up Right";
-            case 8:
-                return "Corner Down Right";
-            default:
-                return "Stop";
-        }
+        return switch (event) {
+            case 1 -> "Corner Up Left";
+            case 2 -> "Corner Down Left";
+            case 4 -> "Corner Up Right";
+            case 8 -> "Corner Down Right";
+            default -> "Stop";
+        };
     }
 
     public static String nameMove(int event) {
@@ -54,6 +49,7 @@ public abstract class MouseAirGestures {
         }
         return output.trim();
     }
+
     //--------------------------------------------------------------------------
     private int lastCorner = 0;
     private int lastAlways = 0;
@@ -64,8 +60,9 @@ public abstract class MouseAirGestures {
     public final int numSeconds() {
         return numPoints * numMillisecs;
     }
+
     //--------------------------------------------------------------------------
-    private Fifo<Point> points = new Fifo<>(numPoints);
+    private final Fifo<Point> points = new Fifo<>(numPoints);
 
     final SuperTimer st = new SuperTimer(this) {
         @Override
@@ -78,13 +75,13 @@ public abstract class MouseAirGestures {
                 currentCorner |= E_CORNER_00;
             }
 
-            if (Mouse.getPoint().equals(new Point(Screen.getWidth() - 1, 0))) {
+            if (Mouse.getPoint().equals(new Point(Screen.size().width - 1, 0))) {
                 currentCorner |= E_CORNER_10;
             }
-            if (Mouse.getPoint().equals(new Point(0, Screen.getHeight() - 1))) {
+            if (Mouse.getPoint().equals(new Point(0, Screen.size().height - 1))) {
                 currentCorner |= E_CORNER_01;
             }
-            if (Mouse.getPoint().equals(new Point(Screen.getWidth() - 1, Screen.getHeight() - 1))) {
+            if (Mouse.getPoint().equals(new Point(Screen.size().width - 1, Screen.size().height - 1))) {
                 currentCorner |= E_CORNER_11;
             }
             if (currentCorner != lastCorner) {

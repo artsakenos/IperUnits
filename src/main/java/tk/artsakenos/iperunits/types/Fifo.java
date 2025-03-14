@@ -19,11 +19,10 @@ import java.util.LinkedList;
  * @param <E>
  * @author Andrea
  */
-@SuppressWarnings("unused")
 public class Fifo<E> extends LinkedList<E> {
 
     // private LinkedList<E> heap = new LinkedList<E>();
-    private int size = 0;
+    private final int size;
 
     public Fifo(int size) {
         this.size = size;

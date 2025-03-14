@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @Log
 @Disabled
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -29,7 +30,7 @@ public class TestSQLiteConnector {
     }
 
     @AfterAll
-    static void tearDown() throws Exception {
+    static void tearDown() {
         db.close();
         // Clean up test database
         File dbFile = new File(TEST_DB);
@@ -157,10 +158,8 @@ public class TestSQLiteConnector {
             Assertions.assertFalse(results.isEmpty());
 
             // Should not be able to write
-            Assertions.assertThrows(SQLException.class, () -> {
-                readOnlyDb.update("INSERT INTO users (name, age) VALUES (?, ?)",
-                        "Test User", 25);
-            });
+            Assertions.assertThrows(SQLException.class, () -> readOnlyDb.update("INSERT INTO users (name, age) VALUES (?, ?)",
+                    "Test User", 25));
         } catch (Exception e) {
             Assertions.fail("Exception should not occur: " + e.getMessage());
         }
