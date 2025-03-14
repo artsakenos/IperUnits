@@ -42,7 +42,7 @@ integrate negli UltraServices o in nuove applicazioni.
 * **UltraImage** - Libreria per elaborazione e analisi di immagini (see, e.g., [UltraGram](https://infodev.wordpress.com/2020/12/05/ultragram-bot-intergeptor-deluxe-2020/), [UltraCam - CodaDellOcchio](https://infodev.wordpress.com/2013/11/05/ultracam/)).
 * **UltraCMS** ([docs](https://artsakenos.github.io/ultra_lib_docs/UltraCMS/index.html)) - ([article](https://infodev.wordpress.com/2018/04/05/ultracms-uscenno-release/)) Framework per CMS, con sistema di template e supporto plugin, see, e.g., CrisiDiGoverno.
 * **UltraHook** - Strumenti di hooking e gestione di eventi di sistema, delle applicazioni, del clibpboard.
-* **IperLibroid** ([docs](https://artsakenos.github.io/ultra_lib_docs/IperLibroid/index.html)) - Librerie IperLibroid general purpose per lo sviluppo Android e SwissArmyKnife App Iperoid.
+* **IperLibroid** ([docs](https://artsakenos.github.io/ultra_lib_docs/IperLibroid/index.html)) - Librerie [IperLibroid](https://github.com/artsakenos/Iperoid) general purpose per lo sviluppo Android e SwissArmyKnife App Iperoid.
 
 E altre librerie e applicazioni:
 * **UltraWemo** ([github](https://github.com/artsakenos/UltraWemo)) - allows you to control your WeMo Devices with a pure Java library with no dependencies.
@@ -114,9 +114,13 @@ Compilare con i parametri:
 **Release Tagging**
 
 1. Aggiorna la versione su `pom.xml`
-2. `git commit -am "Release 2024.03" && git push origin main`
-3. `git tag -a 2024.03 -m "Release 2024.03" && git push origin 2024.03`
-4. Check on [JitPack](https://jitpack.io/#artsakenos/IperUnits) - (pom.xml)[https://jitpack.io/com/github/artsakenos/IperUnits/2024.03/pom.xml]
+2. Commit the new release
+    - `git commit -am "Release 2025.03"`
+    - `git push origin main`
+    - `git tag -a 2025.03 -m "Release 2025.03"`
+    - `git push origin 2025.03`
+3. Check on [JitPack](https://jitpack.io/#artsakenos/IperUnits) 
+   the corresponding [pom.xml](https://jitpack.io/com/github/artsakenos/IperUnits/2024.03/pom.xml)
 
 
 ## Java Shell
