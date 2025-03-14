@@ -115,6 +115,7 @@ Compilare con i parametri:
 
 1. Aggiorna la versione su `pom.xml`
 2. Commit the new release
+    - `git add -A`
     - `git commit -am "Release 2025.03"`
     - `git push origin main`
     - `git tag -a 2025.03 -m "Release 2025.03"`

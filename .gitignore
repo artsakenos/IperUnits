@@ -27,7 +27,9 @@ replay_pid*
 /target/
 /extra/ngrams/
 /.idea/
+/.vscode/
 /extra/
+
 
 infodev.properties
 infodev_preferences.json
