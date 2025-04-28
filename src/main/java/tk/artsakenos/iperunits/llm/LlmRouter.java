@@ -94,19 +94,12 @@ public class LlmRouter {
 
                 // Trasferisci la conversazione dell'utente al servizio LLM
                 for (Message message : conversation) {
-                    service.getConversation().add(message);
+                    // service.getConversation().add(message);
                 }
 
                 // Esegui la query
-                Message response = service.query();
+                // Message response = service.query();
 
-                if (response != null) {
-                    // Aggiungi la risposta alla conversazione persistente dell'utente
-                    if (persistConversations) {
-                        conversation.add(response);
-                    }
-                    return response.getText();
-                }
             } catch (Exception e) {
                 String errorMessage = "Errore con assistente " + assistant.getId() + ": " + e.getMessage();
                 log.log(Level.SEVERE, errorMessage, e);
