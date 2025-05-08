@@ -63,6 +63,11 @@ public class TestLLM {
         assistant = HelperModelsPool.getAssistant("deepseek");
     }
 
+    @Test
+    void testOpenai() {
+        assistant = HelperModelsPool.getAssistant("openai");
+    }
+
     @AfterAll
     public static void results() {
         conversation.add(assistant, Message.Role.user, "Ora ho maldipancia, ma solo la sera, hai qualche consiglio?");

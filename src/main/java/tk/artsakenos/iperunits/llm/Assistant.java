@@ -26,7 +26,7 @@ public abstract class Assistant {
 
     private long lastCallTimestamp = now();
     private long coolDownSeconds = 60;
-    private long contextWindowSize = 1024;
+    private long contextWindowSize = 4096;
 
     @Setter
     private String apikey;
@@ -66,6 +66,10 @@ public abstract class Assistant {
         String id = rootNode.get("id").asText();
         String model = rootNode.get("model").asText();
         long created = rootNode.get("created").asLong();
+        if (!superResponse.isSuccessful()) {
+            String error = superResponse.getBody();
+            return new Message(this, Message.Role.error, Map.of(Message.Type.text, error));
+        }
         // String answer = rootNode.get("choices").get(0).get("message").get("content").asText();
         String answer = rootNode.at("/choices/0/message/content").asText();
         return new Message(this, Message.Role.assistant, Map.of(Message.Type.text, answer));

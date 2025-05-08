@@ -33,7 +33,7 @@ public class LlmService {
             Message error = new Message(assistant, Message.Role.error,
                     Map.of(Message.Type.text, e.getLocalizedMessage() + "::" + superResponse.getBody()));
             conversation.add(error);
-            log.severe("Qualcosa é andato storto nella deserializzazione: "
+            log.severe("Exception during LlmService::query(...): "
                     + e.getLocalizedMessage() + "\nResponse:\n" + superResponse + "\n");
             return error;
         }

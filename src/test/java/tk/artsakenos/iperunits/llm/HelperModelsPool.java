@@ -45,6 +45,11 @@ public class HelperModelsPool extends ModelsPool {
                 Deepseek.MODEL_CHAT);
         instance.put("deepseek", deepseek);
 
+        Assistant openai = new OpenAI(
+                SuperProperties.get("infodev.properties", "APIKEY_OPENAI", null),
+                OpenAI.MODEL_41_MINI);
+        instance.put("openai", openai);
+
     }
 
     public static Assistant getAssistant(String name) {
