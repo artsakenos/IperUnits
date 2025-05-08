@@ -3,12 +3,12 @@ package tk.artsakenos.iperunits.llm;
 import tk.artsakenos.iperunits.initors.SuperProperties;
 import tk.artsakenos.iperunits.llm.models.*;
 
-public class HelperAvailableModels extends AvailableModels {
+public class HelperModelsPool extends ModelsPool {
 
-    private static final HelperAvailableModels instance;
+    private static final HelperModelsPool instance;
 
     static {
-        instance = new HelperAvailableModels();
+        instance = new HelperModelsPool();
 
         Assistant groq = new Groq(
                 SuperProperties.get("infodev.properties", "APIKEY_GROQ", null),

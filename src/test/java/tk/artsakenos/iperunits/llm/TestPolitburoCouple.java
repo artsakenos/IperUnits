@@ -15,9 +15,9 @@ public class TestPolitburoCouple {
 
     @Test
     void testPolitburo() {
-        Assistant groq_infora = HelperAvailableModels.getAssistant("groq_infora_llama3_70b");
-        Assistant cerebras = HelperAvailableModels.getAssistant("cerebras_llama31_8b");
-        Assistant gemini = HelperAvailableModels.getAssistant("google_gemini_20_flash");
+        Assistant groq_infora = HelperModelsPool.getAssistant("groq_infora_llama3_70b");
+        Assistant cerebras = HelperModelsPool.getAssistant("cerebras_llama31_8b");
+        Assistant gemini = HelperModelsPool.getAssistant("google_gemini_20_flash");
 
         AiAgent aiMarito = new AiAgent(gemini, "marito",
                 "accondiscende la moglie in tutto e per tutto",

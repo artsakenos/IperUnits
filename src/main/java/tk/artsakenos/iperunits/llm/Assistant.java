@@ -26,7 +26,7 @@ public abstract class Assistant {
 
     private long lastCallTimestamp = now();
     private long coolDownSeconds = 60;
-    private long maxInputTokens = 1024;
+    private long contextWindowSize = 1024;
 
     @Setter
     private String apikey;

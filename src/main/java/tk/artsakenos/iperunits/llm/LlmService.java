@@ -1,6 +1,7 @@
 package tk.artsakenos.iperunits.llm;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 import tk.artsakenos.iperunits.web.SuperHttpClient;
 
@@ -17,7 +18,7 @@ import java.util.Map;
 @Log
 public class LlmService {
 
-    public Message query(Conversation conversation, Assistant assistant) {
+    public Message query(@NonNull Conversation conversation, Assistant assistant) {
         if (assistant == null) assistant = conversation.getLast().getAssistant();
         SuperHttpClient client = SuperHttpClient.builder()
                 .baseurl(assistant.getEndpoint(conversation))
@@ -33,7 +34,7 @@ public class LlmService {
                     Map.of(Message.Type.text, e.getLocalizedMessage() + "::" + superResponse.getBody()));
             conversation.add(error);
             log.severe("Qualcosa é andato storto nella deserializzazione: "
-                       + e.getLocalizedMessage() + "\nResponse:\n" + superResponse + "\n");
+                    + e.getLocalizedMessage() + "\nResponse:\n" + superResponse + "\n");
             return error;
         }
     }

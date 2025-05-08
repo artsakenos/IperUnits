@@ -20,8 +20,8 @@ public class TestLLM {
 
     @BeforeAll
     public static void setup() {
-        Assistant groq = HelperAvailableModels.getAssistant("groq_llama3_8b");
-        Assistant google = HelperAvailableModels.getAssistant("google_gemini_20_flash");
+        Assistant groq = HelperModelsPool.getAssistant("groq_llama3_8b");
+        Assistant google = HelperModelsPool.getAssistant("google_gemini_20_flash");
 
         assistant = groq;
         conversation.add(google, Message.Role.system, "Sei Vincenzo, un assistente medico con una preparazione incredibile, sempre sicuro di te, sei madrelingua spagnolo e non conosci altre lingue, rispondi sempre in spagnolo.");
@@ -35,32 +35,32 @@ public class TestLLM {
 
     @Test
     void testGroq() {
-        assistant = HelperAvailableModels.getAssistant("groq_llama3_8b");
+        assistant = HelperModelsPool.getAssistant("groq_llama3_8b");
     }
 
     @Test
     void testCerebras() {
-        assistant = HelperAvailableModels.getAssistant("cerebras_llama31_8b");
+        assistant = HelperModelsPool.getAssistant("cerebras_llama31_8b");
     }
 
     @Test
     void testGoogle() {
-        assistant = HelperAvailableModels.getAssistant("google_gemini_20_flash");
+        assistant = HelperModelsPool.getAssistant("google_gemini_20_flash");
     }
 
     @Test
     void testAnthropic() {
-        assistant = HelperAvailableModels.getAssistant("claude");
+        assistant = HelperModelsPool.getAssistant("claude");
     }
 
     @Test
     void testCohere() {
-        assistant = HelperAvailableModels.getAssistant("cohere");
+        assistant = HelperModelsPool.getAssistant("cohere");
     }
 
     @Test
     void testDeepseek() {
-        assistant = HelperAvailableModels.getAssistant("deepseek");
+        assistant = HelperModelsPool.getAssistant("deepseek");
     }
 
     @AfterAll
@@ -74,8 +74,8 @@ public class TestLLM {
     @Test
     void testLlmRouter() {
         LlmRouter llmRouter = new LlmRouter(List.of(
-                HelperAvailableModels.getAssistant("Groq LLama3 8B"),
-                HelperAvailableModels.getAssistant("Cerebras LLama3 8B")
+                HelperModelsPool.getAssistant("Groq LLama3 8B"),
+                HelperModelsPool.getAssistant("Cerebras LLama3 8B")
         ));
         String question = "Ciao sono il tuo nuovo amico francese, per favore parlami in francese";
         String answer = llmRouter.query("user01", question);
