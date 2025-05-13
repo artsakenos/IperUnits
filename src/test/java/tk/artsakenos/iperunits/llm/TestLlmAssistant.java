@@ -37,13 +37,35 @@ public class TestLlmAssistant {
 
 
     @Test
-    public void test() {
-        Conversation conversation_assistant = new Conversation();
+    public void testAssistantAndGuardrail() {
         LlmService llmService_assistant = new LlmService();
-        Assistant llm_assistant = HelperModelsPool.getAssistant("openai");
-        conversation_assistant.add(llm_assistant, Message.Role.system, "");
 
-        Assistant groq = HelperModelsPool.getAssistant("openai");
+        // Inizializza Assistente
+        Assistant llm_assistant = HelperModelsPool.getAssistant("groq_llama3_8b");
+        Conversation conversation_assistant = new Conversation();
+        conversation_assistant.add(llm_assistant, Message.Role.system, prompt_assistant);
+        String userInput = "Mi fai un uovo al tegamino?";
+        conversation_assistant.add(llm_assistant, Message.Role.user, userInput);
+
+
+        // Inizializza classificatore
+        LlmService llmService_guardrail = new LlmService();
+        Assistant llm_guardrail = HelperModelsPool.getAssistant("groq_llama3_8b");
+        Conversation conversation_guardrail = new Conversation();
+
+        StringBuilder classificationOptions = new StringBuilder();
+        prompt_classification.forEach((key, value) -> {
+            classificationOptions.append("* ").append(key).append(": ").append(value).append("\n");
+        });
+        String fullPromptGuardrail = prompt_guardrail + "\n" + classificationOptions;
+        conversation_guardrail.add(llm_guardrail, Message.Role.system, fullPromptGuardrail);
+        conversation_guardrail.add(llm_guardrail, Message.Role.user, userInput);
+
+        Message classifierReply = llmService_guardrail.query(conversation_guardrail, llm_guardrail);
+        System.out.println("Risposta guardrail:\n" + classifierReply.getText());
+
+        Message assistantReply = llmService_assistant.query(conversation_assistant, llm_assistant);
+        System.out.println("Risposta assistente:\n" + assistantReply.getText());
     }
 
 }
