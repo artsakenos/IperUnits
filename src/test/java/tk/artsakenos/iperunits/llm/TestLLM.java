@@ -16,12 +16,13 @@ public class TestLLM {
     private final static LlmService llmService = new LlmService();
     private static Assistant assistant;
     private final static Conversation conversation = new Conversation();
+    private final static TestModelPool modelPool = new TestModelPool();
 
 
     @BeforeAll
     public static void setup() {
-        Assistant groq = HelperModelsPool.getAssistant("groq_llama3_8b");
-        Assistant google = HelperModelsPool.getAssistant("google_gemini_20_flash");
+        Assistant groq = modelPool.get("groq_llama3_8b");
+        Assistant google = modelPool.get("google_gemini_20_flash");
 
         assistant = groq;
         conversation.add(google, Message.Role.system, "Sei Vincenzo, un assistente medico con una preparazione incredibile, sempre sicuro di te, sei madrelingua spagnolo e non conosci altre lingue, rispondi sempre in spagnolo.");
@@ -35,37 +36,37 @@ public class TestLLM {
 
     @Test
     void testGroq() {
-        assistant = HelperModelsPool.getAssistant("groq_llama3_8b");
+        assistant = modelPool.get("groq_llama3_8b");
     }
 
     @Test
     void testCerebras() {
-        assistant = HelperModelsPool.getAssistant("cerebras_llama31_8b");
+        assistant = modelPool.get("cerebras_llama31_8b");
     }
 
     @Test
     void testGoogle() {
-        assistant = HelperModelsPool.getAssistant("google_gemini_20_flash");
+        assistant = modelPool.get("google_gemini_20_flash");
     }
 
     @Test
     void testAnthropic() {
-        assistant = HelperModelsPool.getAssistant("claude");
+        assistant = modelPool.get("claude");
     }
 
     @Test
     void testCohere() {
-        assistant = HelperModelsPool.getAssistant("cohere");
+        assistant = modelPool.get("cohere");
     }
 
     @Test
     void testDeepseek() {
-        assistant = HelperModelsPool.getAssistant("deepseek");
+        assistant = modelPool.get("deepseek");
     }
 
     @Test
     void testOpenai() {
-        assistant = HelperModelsPool.getAssistant("openai");
+        assistant = modelPool.get("openai");
     }
 
     @AfterAll
@@ -79,8 +80,8 @@ public class TestLLM {
     @Test
     void testLlmRouter() {
         LlmRouter llmRouter = new LlmRouter(List.of(
-                HelperModelsPool.getAssistant("Groq LLama3 8B"),
-                HelperModelsPool.getAssistant("Cerebras LLama3 8B")
+                modelPool.get("Groq LLama3 8B"),
+                modelPool.get("Cerebras LLama3 8B")
         ));
         String question = "Ciao sono il tuo nuovo amico francese, per favore parlami in francese";
         String answer = llmRouter.query("user01", question);

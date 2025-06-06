@@ -16,6 +16,9 @@ import static tk.artsakenos.iperunits.string.SuperDate.now;
 /**
  * Mette a disposizione dei metodi di default che si basano sullo standard OpenAI che vale per molti LLM.
  * Altrimenti si possono sovrascrivere all'occorrenza.
+ * <p>
+ * Contiene solo la logica per le richieste, non ha memoria di conversazione e servizi che effettuano le query,
+ * quelle vengono gestite altrove.
  */
 @Data
 public abstract class Assistant {
@@ -24,9 +27,9 @@ public abstract class Assistant {
     private String model;
     private String description;
 
-    private long lastCallTimestamp = now();
     private long coolDownSeconds = 60;
     private long contextWindowSize = 4096;
+    private long lastCallTimestamp = now() - coolDownSeconds * 1001;
 
     @Setter
     private String apikey;
@@ -73,6 +76,10 @@ public abstract class Assistant {
         // String answer = rootNode.get("choices").get(0).get("message").get("content").asText();
         String answer = rootNode.at("/choices/0/message/content").asText();
         return new Message(this, Message.Role.assistant, Map.of(Message.Type.text, answer));
+    }
+
+    public boolean isAvailable() {
+        return (now() - lastCallTimestamp) > coolDownSeconds * 1000;
     }
 
 }

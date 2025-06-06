@@ -9,17 +9,20 @@ import tk.artsakenos.iperunits.llm.politburo.Politburo;
 import java.util.List;
 import java.util.Scanner;
 
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @Log
 @Disabled
 public class TestPolitburoCucina {
 
     private Politburo politburo;
+    private final static TestModelPool modelPool = new TestModelPool();
+
 
     @Test
     public void initPolitburo() {
-        Assistant groq_infora = HelperModelsPool.getAssistant("groq_infora_llama3_70b");
-        Assistant cerebras = HelperModelsPool.getAssistant("cerebras_llama31_8b");
-        Assistant gemini = HelperModelsPool.getAssistant("google_gemini_20_flash");
+        Assistant groq_infora = modelPool.get("groq_infora_llama3_70b");
+        Assistant cerebras = modelPool.get("cerebras_llama31_8b");
+        Assistant gemini = modelPool.get("google_gemini_20_flash");
 
         AiAgent aiChairman = new AiAgent(cerebras, "classificatore",
                 """

@@ -1,7 +1,11 @@
 package tk.artsakenos.iperunits.llm;
 
+import tk.artsakenos.iperunits.system.SuperTimer;
+
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
+
+import static tk.artsakenos.iperunits.string.SuperDate.now;
 
 public class ModelsPool extends LinkedHashMap<String, Assistant> {
 
@@ -26,8 +30,15 @@ public class ModelsPool extends LinkedHashMap<String, Assistant> {
      * @return The available Assistant
      */
     public Assistant route() {
-        for (String key : this.keySet()) {
-            Assistant assistant = this.get(key);
+        for (int i = 0; i < 60; i++) {
+            for (String key : this.keySet()) {
+                Assistant assistant = this.get(key);
+                if (assistant.isAvailable()) {
+                    assistant.setLastCallTimestamp(now());
+                    return assistant;
+                }
+            }
+            SuperTimer.sleep(1000);
         }
         return null;
 

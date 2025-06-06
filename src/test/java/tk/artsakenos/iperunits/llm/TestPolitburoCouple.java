@@ -9,15 +9,19 @@ import tk.artsakenos.iperunits.system.SuperTimer;
 
 import java.util.List;
 
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @Log
 @Disabled
 public class TestPolitburoCouple {
 
+    private final static TestModelPool modelPool = new TestModelPool();
+
+
     @Test
     void testPolitburo() {
-        Assistant groq_infora = HelperModelsPool.getAssistant("groq_infora_llama3_70b");
-        Assistant cerebras = HelperModelsPool.getAssistant("cerebras_llama31_8b");
-        Assistant gemini = HelperModelsPool.getAssistant("google_gemini_20_flash");
+        Assistant groq_infora = modelPool.get("groq_infora_llama3_70b");
+        Assistant cerebras = modelPool.get("cerebras_llama31_8b");
+        Assistant gemini = modelPool.get("google_gemini_20_flash");
 
         AiAgent aiMarito = new AiAgent(gemini, "marito",
                 "accondiscende la moglie in tutto e per tutto",
