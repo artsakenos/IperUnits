@@ -18,7 +18,7 @@ import java.util.Map;
 @Log
 public class LlmService {
 
-    public Message query(@NonNull Conversation conversation, Assistant assistant) {
+    public static Message query(@NonNull Conversation conversation, Assistant assistant) {
         if (assistant == null) assistant = conversation.getLast().getAssistant();
         SuperHttpClient client = SuperHttpClient.builder()
                 .baseurl(assistant.getEndpoint(conversation))
@@ -31,7 +31,10 @@ public class LlmService {
             return answer;
         } catch (Exception e) {
             Message error = new Message(assistant, Message.Role.error,
-                    Map.of(Message.Type.text, e.getLocalizedMessage() + "::" + superResponse.getBody()));
+                    Map.of(Message.Type.text,
+                            "ERROR_MESSAGE:" + e.getLocalizedMessage() + ";\n" +
+                                    "ERROR_CODE:" + superResponse.getCode() + ";\n" +
+                                    "ERROR_BODY:" + superResponse.getBody()));
             conversation.add(error);
             log.severe("Exception during LlmService::query(...): "
                     + e.getLocalizedMessage() + "\nResponse:\n" + superResponse + "\n");

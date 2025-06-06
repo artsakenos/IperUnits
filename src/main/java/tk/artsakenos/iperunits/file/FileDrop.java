@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class makes it easy to drag and drop files from the operating system to
@@ -292,7 +294,7 @@ public class FileDrop {
                             log(out, "FileDrop: file list accepted.");
 
                             // Get a useful list
-                            java.util.List fileList = (java.util.List) tr.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
+                            List fileList = (List) tr.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
                             java.util.Iterator iterator = fileList.iterator();
 
                             // Convert list to array
@@ -413,7 +415,7 @@ public class FileDrop {
 
     private static File[] createFileArray(BufferedReader bReader, PrintStream out) {
         try {
-            java.util.List list = new java.util.ArrayList();
+            List list = new ArrayList();
             String line;
             while ((line = bReader.readLine()) != null) {
                 try {
@@ -808,7 +810,6 @@ public class FileDrop {
          *
          * @param flavor The data flavor for the data to return
          * @return The dropped data
-         * @throws java.io.IOException
          * @since 1.1
          */
         @Override

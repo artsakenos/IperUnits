@@ -51,7 +51,7 @@ public class Cohere extends Assistant {
             for (Message message : conversation) {
                 Message.Role role = message.getRole();
                 if (role == Message.Role.error || role == Message.Role.context) continue;
-                // Role must be one of the following: User, Chatbot, System, Tool"
+                // Role must be one of the following: User, Chatbot, System, Tool
                 String cohereRole = "User";
                 if (role == Message.Role.system) cohereRole = "System";
                 if (role == Message.Role.assistant) cohereRole = "Chatbot";
@@ -81,7 +81,7 @@ public class Cohere extends Assistant {
         String body = superResponse.getBody();
         JsonNode rootNode = Jsonable.toJsonNode(body);
         String id = rootNode.get("id").asText();
-        String answer = "";
+        String answer;
         if (websearch) {
             answer = rootNode.get("text").asText();
         } else answer = rootNode.at("/message/content/0/text").asText();

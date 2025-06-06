@@ -6,14 +6,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @Disabled
 @Log
 public class TestLLM {
 
-    private final static LlmService llmService = new LlmService();
     private static Assistant assistant;
     private final static Conversation conversation = new Conversation();
     private final static TestModelPool modelPool = new TestModelPool();
@@ -72,23 +69,9 @@ public class TestLLM {
     @AfterAll
     public static void results() {
         conversation.add(assistant, Message.Role.user, "Ora ho maldipancia, ma solo la sera, hai qualche consiglio?");
-        log.info("Answer: " + llmService.query(conversation, assistant));
+        log.info("Answer: " + LlmService.query(conversation, assistant));
         log.info("Conversation: " + conversation);
 
-    }
-
-    @Test
-    void testLlmRouter() {
-        LlmRouter llmRouter = new LlmRouter(List.of(
-                modelPool.get("Groq LLama3 8B"),
-                modelPool.get("Cerebras LLama3 8B")
-        ));
-        String question = "Ciao sono il tuo nuovo amico francese, per favore parlami in francese";
-        String answer = llmRouter.query("user01", question);
-        System.out.println(question + "\n    > " + answer);
-        question = "mi dici come si fa la pizza?";
-        answer = llmRouter.query("user01", question);
-        System.out.println(question + "\n    > " + answer);
     }
 
 }

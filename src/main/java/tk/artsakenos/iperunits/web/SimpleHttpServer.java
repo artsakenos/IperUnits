@@ -8,6 +8,7 @@ package tk.artsakenos.iperunits.web;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import lombok.extern.java.Log;
 import tk.artsakenos.iperunits.string.SuperString;
 
 import java.io.IOException;
@@ -17,8 +18,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static tk.artsakenos.iperunits.file.SuperLog.log;
 
 /**
  * Un server minimale ristretto ad un context che invia risposte testuali. In
@@ -34,6 +33,7 @@ import static tk.artsakenos.iperunits.file.SuperLog.log;
  * @version 2017.10.15
  */
 @SuppressWarnings("unused")
+@Log
 public class SimpleHttpServer {
 
     private HttpServer server;
@@ -48,14 +48,14 @@ public class SimpleHttpServer {
         try {
             server = HttpServer.create(new InetSocketAddress(port), 0);
         } catch (IOException ex) {
-            log("SimpleHttpServer", "ERROR Starting Started at port " + port + " with endpoint:" + uriContext + ": " + ex.getLocalizedMessage());
+            log.info("ERROR Starting Started at port " + port + " with endpoint:" + uriContext + ": " + ex.getLocalizedMessage());
             Logger.getLogger(SimpleHttpServer.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
         server.createContext(uriContext, this::handleRequest);
         server.setExecutor(null); // creates a default executor
         server.start();
-        log("SimpleHttpServer", "Server Started at port " + port + " with endpoint:" + uriContext + ".");
+        log.info("Server Started at port " + port + " with endpoint:" + uriContext + ".");
     }
 
     public final void stop() {

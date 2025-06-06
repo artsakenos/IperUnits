@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * It is a simple, versatile Database Wrapper. Lets you to handle ResultSets and
+ * It is a simple, versatile Database Wrapper. Lets you handle ResultSets and
  * Exceptions.
  * <p>
  * Connection and Query example:
@@ -121,8 +121,7 @@ public class Database {
      */
     public ResultSet select(String query) throws SQLException {
         Statement st = getConnection().createStatement();
-        ResultSet rs = st.executeQuery(query);
-        return rs;
+        return st.executeQuery(query);
     }
 
     /**
