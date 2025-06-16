@@ -357,7 +357,7 @@ public class FileManager {
         ArrayList<File> result = new ArrayList<>();
 
         if (aStartingDir == null) {
-            log.severe("getFileRecursive(" + aStartingDir + "): Directory should not be null.");
+            log.severe("getFileRecursive(null): Directory should not be null.");
             return result;
         }
         if (!aStartingDir.exists()) {
@@ -677,10 +677,8 @@ public class FileManager {
     }
 
     public static String getCRC32(String file_path) {
-        InputStream inputStream = null;
         CRC32 crc = new CRC32();
-        try {
-            inputStream = new BufferedInputStream(new FileInputStream(file_path));
+        try (InputStream inputStream = new BufferedInputStream(new FileInputStream(file_path))) {
 
             int cnt;
             while ((cnt = inputStream.read()) != -1) {
@@ -690,15 +688,8 @@ public class FileManager {
             return Long.toHexString(crc.getValue());
         } catch (IOException ex) {
             // Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException ex) {
-                // Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
+        // Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
         return "";
     }
 

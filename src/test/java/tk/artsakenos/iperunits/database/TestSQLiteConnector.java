@@ -8,9 +8,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
+import static org.junit.jupiter.api.Assertions.*;
+
+@SuppressWarnings({"ResultOfMethodCallIgnored", "SqlSourceToSinkFlow"})
 @Log
-@Disabled
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestSQLiteConnector {
 
@@ -19,20 +20,22 @@ public class TestSQLiteConnector {
 
     @BeforeAll
     static void setUp() {
-        // Delete existing test database if it exists
+        // Rimuove il database di test se esiste per partire da uno stato pulito
         File dbFile = new File(TEST_DB);
         if (dbFile.exists()) {
             dbFile.delete();
         }
 
-        // Create new database connection
-        db = new SQLiteConnector(TEST_DB);
+        // Ora questa sintassi è corretta grazie alla modifica in SQLiteConnector
+        db = SQLiteConnector.builder(TEST_DB).build();
     }
 
     @AfterAll
     static void tearDown() {
-        db.close();
-        // Clean up test database
+        if (db != null) {
+            db.close();
+        }
+        // Pulisce il file del database dopo i test
         File dbFile = new File(TEST_DB);
         if (dbFile.exists()) {
             dbFile.delete();
@@ -46,153 +49,116 @@ public class TestSQLiteConnector {
                     CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
-                        age INTEGER,
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        age INTEGER
                     )
                 """;
 
-        int result = db.update(createTableSQL);
-        log.info("Table creation result: " + result);
-
-        Assertions.assertTrue(db.tableExists("users"));
+        db.update(createTableSQL);
+        log.info("Tabella 'users' creata.");
+        assertTrue(db.tableExists("users"), "La tabella 'users' dovrebbe esistere dopo la creazione.");
     }
 
     @Test
     @Order(2)
-    void testInsertData() throws SQLException {
-        // Insert single record
-        String insertSQL = "INSERT INTO users (name, age) VALUES (?, ?)";
-        int result = db.update(insertSQL, "John Doe", 30);
-        Assertions.assertEquals(1, result);
-
-        // Insert multiple records in a transaction
-        boolean transactionSuccess = db.executeTransaction(connection -> {
-            try (var stmt = connection.prepareStatement("INSERT INTO users (name, age) VALUES (?, ?)")) {
-                // First user
-                stmt.setString(1, "Jane Smith");
-                stmt.setInt(2, 25);
-                stmt.executeUpdate();
-
-                // Second user
-                stmt.setString(1, "Bob Johnson");
-                stmt.setInt(2, 35);
-                stmt.executeUpdate();
-            }
+    void testInsertData() {
+        assertDoesNotThrow(() -> {
+            String insertSQL = "INSERT INTO users (name, age) VALUES (?, ?)";
+            int result = db.update(insertSQL, "John Doe", 30);
+            assertEquals(1, result, "Dovrebbe essere stata inserita una riga.");
         });
 
-        Assertions.assertTrue(transactionSuccess);
+        assertDoesNotThrow(() -> db.executeTransaction(connection -> {
+            try (var stmt = connection.prepareStatement("INSERT INTO users (name, age) VALUES (?, ?)")) {
+                stmt.setString(1, "Jane Smith");
+                stmt.setInt(2, 25);
+                stmt.addBatch();
+
+                stmt.setString(1, "Bob Johnson");
+                stmt.setInt(2, 35);
+                stmt.addBatch();
+
+                stmt.executeBatch();
+            }
+        }), "La transazione di inserimento non dovrebbe lanciare eccezioni.");
     }
 
     @Test
     @Order(3)
     void testQueryData() throws SQLException {
-        // Test simple query
-        List<Map<String, Object>> allUsers = db.query("SELECT * FROM users");
-        Assertions.assertEquals(3, allUsers.size());
+        List<Map<String, Object>> allUsers = db.query("SELECT * FROM users", SQLiteConnector::resultSetToList);
+        assertEquals(3, allUsers.size(), "Dovrebbero esserci 3 utenti nel database.");
 
-        // Test parameterized query
         List<Map<String, Object>> youngUsers = db.query(
-                "SELECT * FROM users WHERE age < ?",
-                30
-        );
-        Assertions.assertEquals(1, youngUsers.size());
-        Assertions.assertEquals("Jane Smith", youngUsers.get(0).get("name"));
+                "SELECT * FROM users WHERE age < ?", SQLiteConnector::resultSetToList, 30);
+        assertEquals(1, youngUsers.size(), "Dovrebbe esserci un solo utente con meno di 30 anni.");
+        assertEquals("Jane Smith", youngUsers.get(0).get("name"));
 
-        // Test complex query
-        List<Map<String, Object>> stats = db.query("""
-                    SELECT
-                        COUNT(*) as total_users,
-                        AVG(age) as average_age,
-                        MIN(age) as youngest,
-                        MAX(age) as oldest
-                    FROM users
-                """);
-
+        List<Map<String, Object>> stats = db.query(
+                "SELECT COUNT(*) as total_users, AVG(age) as average_age FROM users", SQLiteConnector::resultSetToList);
         Map<String, Object> statsRow = stats.get(0);
-        log.info("Statistics: " + statsRow);
+        log.info("Statistiche: " + statsRow);
 
-        Assertions.assertEquals(3, statsRow.get("total_users"));
-        Assertions.assertTrue((Double) statsRow.get("average_age") > 25);
+        assertEquals(3, statsRow.get("total_users"));
+        assertEquals(30.0, (Double) statsRow.get("average_age"));
     }
 
     @Test
     @Order(4)
     void testUpdateData() throws SQLException {
-        // Update single record
-        int updateResult = db.update(
-                "UPDATE users SET age = age + 1 WHERE name = ?",
-                "John Doe"
-        );
-        Assertions.assertEquals(1, updateResult);
+        int updateResult = db.update("UPDATE users SET age = age + 1 WHERE name = ?", "John Doe");
+        assertEquals(1, updateResult, "Dovrebbe essere stata aggiornata una riga.");
 
-        // Verify update
         List<Map<String, Object>> updated = db.query(
-                "SELECT age FROM users WHERE name = ?",
-                "John Doe"
-        );
-        Assertions.assertEquals(31, updated.get(0).get("age"));
+                "SELECT age FROM users WHERE name = ?", SQLiteConnector::resultSetToList, "John Doe");
+        assertEquals(31, updated.get(0).get("age"));
     }
 
     @Test
     @Order(5)
     void testDeleteData() throws SQLException {
-        // Delete single record
-        int deleteResult = db.update(
-                "DELETE FROM users WHERE name = ?",
-                "Bob Johnson"
-        );
-        Assertions.assertEquals(1, deleteResult);
+        int deleteResult = db.update("DELETE FROM users WHERE name = ?", "Bob Johnson");
+        assertEquals(1, deleteResult, "Dovrebbe essere stata cancellata una riga.");
 
-        // Verify deletion
-        List<Map<String, Object>> remaining = db.query("SELECT * FROM users");
-        Assertions.assertEquals(2, remaining.size());
+        List<Map<String, Object>> remaining = db.query("SELECT * FROM users", SQLiteConnector::resultSetToList);
+        assertEquals(2, remaining.size(), "Dovrebbero rimanere due utenti.");
     }
 
     @Test
     @Order(6)
     void testReadOnlyConnection() {
-        // Create read-only connection
-        try (SQLiteConnector readOnlyDb = new SQLiteConnector(TEST_DB, true)) {
-            // Should be able to read
-            List<Map<String, Object>> results = readOnlyDb.query("SELECT * FROM users");
-            Assertions.assertFalse(results.isEmpty());
+        // Usa il builder per creare una connessione in sola lettura
+        try (SQLiteConnector readOnlyDb = SQLiteConnector.builder(TEST_DB).readOnly(true).build()) {
 
-            // Should not be able to write
-            Assertions.assertThrows(SQLException.class, () -> readOnlyDb.update("INSERT INTO users (name, age) VALUES (?, ?)",
-                    "Test User", 25));
-        } catch (Exception e) {
-            Assertions.fail("Exception should not occur: " + e.getMessage());
+            List<Map<String, Object>> results = assertDoesNotThrow(
+                    () -> readOnlyDb.query("SELECT * FROM users", SQLiteConnector::resultSetToList)
+            );
+            assertFalse(results.isEmpty(), "I risultati non dovrebbero essere vuoti in modalità sola lettura.");
+
+            assertThrows(SQLException.class, () -> readOnlyDb.update("INSERT INTO users (name, age) VALUES (?, ?)", "Test User", 25), "Un'operazione di scrittura su una connessione read-only dovrebbe lanciare una SQLException.");
         }
     }
 
     @Test
     @Order(7)
     void testTransactionRollback() throws SQLException {
-        // Get initial count
-        int initialCount = db.query("SELECT COUNT(*) as count FROM users")
-                .get(0).get("count").toString().length();
+        Number initialCount = (Number) db.query(
+                "SELECT COUNT(*) as count FROM users", SQLiteConnector::resultSetToList).get(0).get("count");
 
-        // Try to execute invalid transaction
-        boolean result = db.executeTransaction(connection -> {
-            // First insert should succeed
+        assertThrows(SQLException.class, () -> db.executeTransaction(connection -> {
             try (var stmt = connection.prepareStatement("INSERT INTO users (name, age) VALUES (?, ?)")) {
                 stmt.setString(1, "Will Rollback");
                 stmt.setInt(2, 50);
                 stmt.executeUpdate();
             }
-
-            // This should fail and trigger rollback
             try (var stmt = connection.prepareStatement("INSERT INTO invalid_table (name) VALUES (?)")) {
                 stmt.setString(1, "Should Fail");
                 stmt.executeUpdate();
             }
-        });
+        }), "Una transazione con un'istruzione SQL non valida dovrebbe lanciare una SQLException.");
 
-        Assertions.assertFalse(result);
+        Number finalCount = (Number) db.query(
+                "SELECT COUNT(*) as count FROM users", SQLiteConnector::resultSetToList).get(0).get("count");
 
-        // Verify count hasn't changed
-        int finalCount = db.query("SELECT COUNT(*) as count FROM users")
-                .get(0).get("count").toString().length();
-        Assertions.assertEquals(initialCount, finalCount);
+        assertEquals(initialCount.intValue(), finalCount.intValue(), "Il conteggio degli utenti dovrebbe essere invariato dopo un rollback.");
     }
 }
