@@ -21,7 +21,7 @@ public class Groq extends Assistant {
         setProvider("groq");
         setModel(model);
         setApikey(apiKey);
-        setDescription("Groq, fast inference on a TSP Architecture: " + model);
+        setDescription("Groq, fast inference on a TSP Architecture");
     }
 
     @Override

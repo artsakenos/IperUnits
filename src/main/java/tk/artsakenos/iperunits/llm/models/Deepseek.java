@@ -19,7 +19,7 @@ public class Deepseek extends Assistant {
         setProvider("deepseek");
         setModel(model);
         setApikey(apiKey);
-        setDescription("DeepSeek-V3 achieves a significant breakthrough in inference speed over previous models.: " + model);
+        setDescription("DeepSeek-V3 achieves a significant breakthrough in inference speed over previous models");
     }
 
     @Override

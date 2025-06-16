@@ -113,7 +113,7 @@ public class SuperHttpClient {
             if (!response.isSuccessful()) {
                 log.severe("# Error during postJson.\n" +
                         "## Url\n" + urlWithParams + "\n" +
-                        "## Headers\n" + headerParameters.keySet() + "\n" +
+                        "## Headers\n" + (headerParameters == null ? "No Headers" : headerParameters.keySet()) + "\n" +
                         "## Request\n" + jsonBody + "\n" +
                         "## Response\n" + response + "\n" +
                         "## Has Auth Header\n" + (authHeader != null) + "\n");
@@ -222,10 +222,8 @@ public class SuperHttpClient {
             String encodedFormData = "";
             if (formData != null && !formData.isEmpty()) {
                 encodedFormData = formData.entrySet().stream()
-                        .map(entry -> {
-                            return URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" +
-                                    URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
-                        })
+                        .map(entry -> URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" +
+                                URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8))
                         .collect(Collectors.joining("&"));
             }
 

@@ -68,8 +68,8 @@ public class Politburo {
                 .replace("{agent.profile}", currentSpeaker.getProfile().replaceAll("\n", "    "))
                 .replace("{agent.target}", currentSpeaker.getTarget());
         LlmService llmService = new LlmService();
-        llmService.addMessage(currentSpeaker.getAssistant(), Message.Role.user, currentSystem);
-        Message answer = llmService.query();
+        // llmService.addMessage(currentSpeaker.getAssistant(), Message.Role.user, currentSystem);
+        Message answer = llmService.query(null, null);
 
         System.out.println("   -------------------------------------------------------------");
         System.out.println("   --- Current System Prompt for the Next Agent ----------------");

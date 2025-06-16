@@ -1,83 +1,86 @@
 package tk.artsakenos.iperunits.database;
 
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
- * A thread-safe SQLite database connector with built-in connection pooling and resource management.
- * Uses builder pattern for easy configuration and provides convenient query methods.
+ * Un connettore thread-safe per database SQLite che semplifica l'esecuzione di query
+ * e la gestione delle transazioni. Utilizza il pattern Builder per una configurazione
+ * flessibile e gestisce automaticamente le risorse JDBC.
  */
-@SuppressWarnings("unused")
 @Log
+@Builder(toBuilder = true) // 'toBuilder = true' è una buona pratica se vuoi clonare e modificare l'oggetto
 public class SQLiteConnector implements AutoCloseable {
+
     @NonNull
     private final String dbFile;
 
-    private final boolean readOnly;
-    private final boolean autoCommit;
-    private final int poolSize;
-    private final int cacheSize;
-    private final SQLiteConfig.JournalMode journalMode;
+    @Builder.Default
+    private final boolean readOnly = false;
+    @Builder.Default
+    private final boolean autoCommit = true;
+    @Builder.Default
+    private final int cacheSize = 2000;
+    @Builder.Default
+    private final SQLiteConfig.JournalMode journalMode = SQLiteConfig.JournalMode.WAL;
 
-    private final ConnectionPool connectionPool;
-    private final SQLiteConfig config;
+    // --- COSTRUTTORE E CAMPI DERIVATI RIMOSSI ---
+    // Lombok ora genera un costruttore "all-args" privato per il builder,
+    // eliminando il conflitto.
 
-    public SQLiteConnector(String dbFile) {
-        this(dbFile, false, true, 5, 2000, SQLiteConfig.JournalMode.WAL);
-    }
-
-    public SQLiteConnector(String dbFile, boolean readOnly) {
-        this(dbFile, readOnly, true, 5, 2000, SQLiteConfig.JournalMode.WAL);
-    }
-
-    // This constructor is called by the generated builder
-    public SQLiteConnector(String dbFile,
-                           boolean readOnly,
-                           boolean autoCommit,
-                           int poolSize,
-                           int cacheSize,
-                           SQLiteConfig.JournalMode journalMode) {
-        this.dbFile = dbFile;
-        this.readOnly = readOnly;
-        this.autoCommit = autoCommit;
-        this.poolSize = poolSize;
-        this.cacheSize = cacheSize;
-        this.journalMode = journalMode;
-
-        this.config = new SQLiteConfig();
-        this.config.setReadOnly(readOnly);
-        this.config.setJournalMode(journalMode);
-        this.config.setCacheSize(cacheSize);
-
-        this.connectionPool = new ConnectionPool(
-                dbFile,
-                poolSize,
-                autoCommit,
-                config
-        );
+    /**
+     * Crea un'istanza del builder, impostando il parametro obbligatorio dbFile.
+     * Questo è il punto di ingresso preferito per creare un SQLiteConnector.
+     *
+     * @param dbFile Il percorso del file del database (obbligatorio).
+     * @return Un'istanza di SQLiteConnectorBuilder per la configurazione fluente.
+     */
+    public static SQLiteConnectorBuilder builder(@NonNull String dbFile) {
+        return new SQLiteConnectorBuilder().dbFile(dbFile);
     }
 
     /**
-     * Executes a query that returns a result set.
+     * Crea una nuova connessione al database.
+     * La configurazione e l'URL vengono generati on-demand.
+     * @return Una nuova istanza di Connection.
+     * @throws SQLException Se si verifica un errore durante la connessione.
      */
-    public List<Map<String, Object>> query(@NonNull String sql) throws SQLException {
-        try (Connection conn = connectionPool.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            return resultSetToList(rs);
+    private Connection getConnection() throws SQLException {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("Driver JDBC di SQLite non trovato.", e);
         }
+
+        // Crea URL e Properties al momento della necessità
+        String dbUrl = "jdbc:sqlite:" + this.dbFile;
+        SQLiteConfig config = new SQLiteConfig();
+        config.setReadOnly(this.readOnly);
+        config.setJournalMode(this.journalMode);
+        config.setCacheSize(this.cacheSize);
+        Properties configProperties = config.toProperties();
+
+        Connection conn = DriverManager.getConnection(dbUrl, configProperties);
+        conn.setAutoCommit(this.autoCommit);
+        return conn;
     }
 
+    // --- Tutti gli altri metodi (query, update, etc.) rimangono invariati ---
+
     /**
-     * Executes a query with prepared statement parameters.
+     * Esegue una query e processa il risultato tramite un'interfaccia funzionale.
      */
-    public List<Map<String, Object>> query(@NonNull String sql, Object... params) throws SQLException {
-        try (Connection conn = connectionPool.getConnection();
+    public <T> T query(@NonNull String sql, @NonNull ResultSetProcessor<T> processor, Object... params) throws SQLException {
+        try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             for (int i = 0; i < params.length; i++) {
@@ -85,94 +88,73 @@ public class SQLiteConnector implements AutoCloseable {
             }
 
             try (ResultSet rs = stmt.executeQuery()) {
-                return resultSetToList(rs);
+                return processor.process(rs);
             }
         }
     }
 
     /**
-     * Executes an update statement (INSERT, UPDATE, DELETE).
-     */
-    public int update(@NonNull String sql) throws SQLException {
-        try (Connection conn = connectionPool.getConnection();
-             Statement stmt = conn.createStatement()) {
-            return stmt.executeUpdate(sql);
-        }
-    }
-
-    /**
-     * Executes an update statement with prepared statement parameters.
+     * Esegue un'operazione di aggiornamento (INSERT, UPDATE, DELETE).
      */
     public int update(@NonNull String sql, Object... params) throws SQLException {
-        try (Connection conn = connectionPool.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             for (int i = 0; i < params.length; i++) {
                 stmt.setObject(i + 1, params[i]);
             }
-
             return stmt.executeUpdate();
         }
     }
 
     /**
-     * Executes multiple statements in a transaction.
+     * Esegue una serie di operazioni all'interno di una singola transazione.
      */
-    public boolean executeTransaction(@NonNull TransactionOperation operations) {
-        Connection conn = null;
-        try {
-            conn = connectionPool.getConnection();
-            conn.setAutoCommit(false);
-            operations.execute(conn);
-            conn.commit();
-            return true;
-        } catch (SQLException e) {
-            log.severe("Transaction failed: " + e.getMessage());
-            if (conn != null) {
+    public void executeTransaction(@NonNull TransactionOperation operation) throws SQLException {
+        try (Connection conn = getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                operation.execute(conn);
+                conn.commit();
+            } catch (SQLException e) {
+                log.severe("Transazione fallita, avvio del rollback: " + e.getMessage());
                 try {
                     conn.rollback();
                 } catch (SQLException ex) {
-                    log.severe("Rollback failed: " + ex.getMessage());
+                    log.severe("Rollback fallito: " + ex.getMessage());
+                    e.addSuppressed(ex);
                 }
-            }
-            return false;
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    log.severe("Error closing connection: " + e.getMessage());
-                }
+                throw e;
             }
         }
     }
 
     /**
-     * Checks if a table exists in the database.
+     * Controlla se una tabella o una vista esiste nel database.
      */
     public boolean tableExists(@NonNull String tableName) throws SQLException {
         String sql = "SELECT name FROM sqlite_master WHERE (type='table' OR type='view') AND name=?";
-        try (Connection conn = connectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, tableName);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
-            }
-        }
+        return query(sql, ResultSet::next, tableName);
     }
 
     @Override
     public void close() {
-        connectionPool.close();
+        // Nessuna operazione necessaria
     }
 
-    private List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
+    @FunctionalInterface
+    public interface ResultSetProcessor<T> {
+        T process(ResultSet rs) throws SQLException;
+    }
+
+    @FunctionalInterface
+    public interface TransactionOperation {
+        void execute(Connection connection) throws SQLException;
+    }
+
+    public static List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
         List<Map<String, Object>> results = new ArrayList<>();
         ResultSetMetaData meta = rs.getMetaData();
         int columnCount = meta.getColumnCount();
-
         while (rs.next()) {
             Map<String, Object> row = new HashMap<>();
             for (int i = 1; i <= columnCount; i++) {
@@ -180,68 +162,6 @@ public class SQLiteConnector implements AutoCloseable {
             }
             results.add(row);
         }
-
         return results;
-    }
-
-    /**
-     * Functional interface for transaction operations.
-     */
-    @FunctionalInterface
-    public interface TransactionOperation {
-        void execute(Connection connection) throws SQLException;
-    }
-
-    /**
-     * Internal connection pool implementation.
-     */
-    @Log
-    private static class ConnectionPool {
-        private final Queue<Connection> connections;
-        private final String dbFile;
-        private final boolean autoCommit;
-        private final SQLiteConfig config;
-        private final int poolSize;
-
-        public ConnectionPool(String dbFile, int poolSize, boolean autoCommit, SQLiteConfig config) {
-            this.dbFile = dbFile;
-            this.poolSize = poolSize;
-            this.autoCommit = autoCommit;
-            this.config = config;
-            this.connections = new LinkedList<>();
-        }
-
-        public synchronized Connection getConnection() throws SQLException {
-            Connection conn = connections.poll();
-            if (conn == null || conn.isClosed()) {
-                conn = createConnection();
-            }
-            return conn;
-        }
-
-        private Connection createConnection() throws SQLException {
-            try {
-                Class.forName("org.sqlite.JDBC");
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:sqlite:" + dbFile,
-                        config.toProperties()
-                );
-                conn.setAutoCommit(autoCommit);
-                return conn;
-            } catch (ClassNotFoundException e) {
-                throw new SQLException("SQLite JDBC driver not found", e);
-            }
-        }
-
-        public synchronized void close() {
-            connections.forEach(conn -> {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    log.warning("Error closing connection: " + e.getMessage());
-                }
-            });
-            connections.clear();
-        }
     }
 }

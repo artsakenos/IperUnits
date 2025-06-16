@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * @version 2005.07.12
  */
 @Log
-@SuppressWarnings({"unused", "ExtractMethodRecommender"})
+@SuppressWarnings("unused")
 public class Keyboard {
 
     private static final Logger logger = Logger.getLogger(Keyboard.class.getName());

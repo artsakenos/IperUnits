@@ -148,7 +148,7 @@ public class SuperFileText {
             }
         }
         // Removing BOM!
-        if (contents.length() > 0 && contents.charAt(0) == 65279) {
+        if (!contents.isEmpty() && contents.charAt(0) == 65279) {
             contents.deleteCharAt(0);
         }
         return contents.toString();
@@ -194,7 +194,7 @@ public class SuperFileText {
             Logger.getLogger(SuperFileText.class.getName()).log(Level.SEVERE, "ERROR in appendText(...):{0}", ex.getLocalizedMessage());
             return;
         }
-        OutputStreamWriter oStream = new OutputStreamWriter(oFileStream, Charset.forName("UTF-8"));
+        OutputStreamWriter oStream = new OutputStreamWriter(oFileStream, StandardCharsets.UTF_8);
         BufferedWriter bw = new BufferedWriter(oStream);
         try {
             bw.append(text);
@@ -255,7 +255,7 @@ public class SuperFileText {
             if (fileHandler != null) {
                 try {
                     fileHandler.close();
-                } catch (IOException e) {
+                } catch (IOException ignored) {
                 }
             }
         }

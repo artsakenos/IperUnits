@@ -50,14 +50,14 @@ public class FileIni extends HashMap<String, String> {
     private void loadFromString(String iniContent) {
         iniContent = iniContent.replaceAll("\r", "");
         String title = "";
-        String content = "";
+        StringBuilder content = new StringBuilder();
 
         for (String line : iniContent.split("\n")) {
             if (line.startsWith("[") && line.endsWith("]")
                     && iniContent.indexOf("[/" + line.substring(1), iniContent.indexOf(line)) > 0) {
                 // Title Found
                 title = line.substring(1, line.length() - 1);
-                content = "";
+                content = new StringBuilder();
                 continue;
             }
 
@@ -65,7 +65,7 @@ public class FileIni extends HashMap<String, String> {
                 put(title, content.substring(0, content.length() - 1));
                 // Found enclosure
             }
-            content += line + "\n";
+            content.append(line).append("\n");
         }
     }
 

@@ -4,21 +4,16 @@
  */
 package tk.artsakenos.iperunits.web.superserver;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
  */
 public abstract class ClientHelper implements Runnable {
 
-    private Socket clientSocket = null;
-    private InputStream input;
+    private final Socket clientSocket;
     private OutputStream output;
 
     public abstract void onError(String tag, Exception e);
@@ -42,7 +37,7 @@ public abstract class ClientHelper implements Runnable {
             return;
         }
         try {
-            output.write((line).getBytes(Charset.forName("UTF-8")));
+            output.write((line).getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             onError("ERROR SENDING DATA", ex);
         }
@@ -51,7 +46,7 @@ public abstract class ClientHelper implements Runnable {
     @Override
     public void run() {
         try {
-            input = clientSocket.getInputStream();
+            InputStream input = clientSocket.getInputStream();
             output = clientSocket.getOutputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(input);
             BufferedReader reader = new BufferedReader(inputStreamReader);

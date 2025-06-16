@@ -77,7 +77,6 @@ aggiungendo le dipendenze (anche di una delle sotto librerie disponibili)
     </dependency> 
 </dependencies>
 ```
-
 3. Incorporate tramite JitPack:
 ```xml    
 <repositories>

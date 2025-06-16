@@ -37,7 +37,7 @@ Gestisce la simulazione di input da tastiera (click, scrittura, combinazioni di 
 
 ## Esempio di utilizzo
 
-```java
+```
 Keyboard.Write("Hello, [CONTROL]c[/CONTROL]!");
 ```
 

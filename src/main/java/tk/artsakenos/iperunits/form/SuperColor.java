@@ -177,7 +177,7 @@ public class SuperColor {
 
     /**
      * @param colorStr e.g. "#FFFFFF"
-     * @return
+     * @return The Color
      */
     @SuppressWarnings("UseSpecificCatch")
     public static Color hex2Rgb(String colorStr) {
