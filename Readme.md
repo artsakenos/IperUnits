@@ -92,7 +92,7 @@ aggiungendo le dipendenze
    <dependency>
       <groupId>com.github.artsakenos</groupId>
       <artifactId>IperUnits</artifactId>
-      <version>2024.03</version>
+      <version>2024.06</version>
    </dependency>
 </dependencies>
 ```
@@ -115,12 +115,13 @@ Compilare con i parametri:
 1. Aggiorna la versione su `pom.xml`
 2. Commit the new release
     - `git add -A`
-    - `git commit -am "Release 2025.03"`
+    - `git commit -am "Release 2025.06"`
     - `git push origin main`
-    - `git tag -a 2025.03 -m "Release 2025.03"`
-    - `git push origin 2025.03`
+    - `git tag -a 2025.06 -m "Release 2025.06"`
+    - `git push origin 2025.06`
 3. Check on [JitPack](https://jitpack.io/#artsakenos/IperUnits) 
-   the corresponding [pom.xml](https://jitpack.io/com/github/artsakenos/IperUnits/2024.03/pom.xml)
+   the corresponding [pom.xml](https://jitpack.io/com/github/artsakenos/IperUnits/2025.06/IperUnits-2025.06.pom) 
+   and [build logs](https://jitpack.io/com/github/artsakenos/IperUnits/2025.06/build.log)
 
 
 ## Java Shell

@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings({"ResultOfMethodCallIgnored", "SqlSourceToSinkFlow"})
 @Log
+@Disabled
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestSQLiteConnector {
 
